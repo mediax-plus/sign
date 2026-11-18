@@ -66,7 +66,7 @@ export const EnvelopeDropZoneWrapper = ({ children, type, className }: EnvelopeD
       const payload = {
         folderId,
         type,
-        title: files[0].name,
+        title: files[0].name.replace(/\.pdf$/i, '') || files[0].name,
         meta: {
           timezone: userTimezone,
         },

@@ -76,7 +76,7 @@ export const DocumentUploadButtonLegacy = ({ className, type }: DocumentUploadBu
       setIsLoading(true);
 
       const payload = {
-        title: file.name,
+        title: file.name.replace(/\.pdf$/i, '') || file.name,
         folderId: folderId ?? undefined,
         meta: {
           timezone: userTimezone,

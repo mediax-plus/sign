@@ -156,7 +156,8 @@ export const createEnvelopeRouteCaller = async ({
       });
 
       return {
-        title: file.name,
+        title: file.name.replace(/\.pdf$/i, '') || file.name,
+        fileName: file.name,
         documentDataId: documentData.id,
         placeholders,
         pageCount: filePageCount,
@@ -166,7 +167,7 @@ export const createEnvelopeRouteCaller = async ({
 
   const getDocumentDataId = (identifier: string | number | undefined) => {
     const documentDataId = match(identifier)
-      .with(P.string, (title) => envelopeItems.find((item) => item.title === title)?.documentDataId)
+      .with(P.string, (fileName) => envelopeItems.find((item) => item.fileName === fileName)?.documentDataId)
       .with(P.number, (index) => envelopeItems.at(index)?.documentDataId)
       .with(undefined, () => envelopeItems.at(0)?.documentDataId)
       .exhaustive();
