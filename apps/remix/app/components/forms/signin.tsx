@@ -403,7 +403,7 @@ export const SignInForm = ({
                 loading={isSubmitting}
                 className="dark:bg-documenso-200 dark:hover:opacity-90"
               >
-                {isSubmitting ? <Trans>Signing in...</Trans> : <Trans>Sign In</Trans>}
+                {isSubmitting ? <Trans>Signing in...</Trans> : <Trans>Sign in</Trans>}
               </Button>
             </>
           )}
@@ -550,7 +550,7 @@ export const SignInForm = ({
                 </Button>
 
                 <Button type="submit" loading={isSubmitting}>
-                  {isSubmitting ? <Trans>Signing in...</Trans> : <Trans>Sign In</Trans>}
+                  {isSubmitting ? <Trans>Signing in...</Trans> : <Trans>Sign in</Trans>}
                 </Button>
               </DialogFooter>
             </fieldset>

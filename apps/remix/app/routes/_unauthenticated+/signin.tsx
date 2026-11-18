@@ -20,12 +20,13 @@ import { Link, redirect, useSearchParams } from 'react-router';
 
 import { SignInForm } from '~/components/forms/signin';
 import { SIGNUP_ERROR_MESSAGES } from '~/components/forms/signup';
+import { BrandingLogo } from '~/components/general/branding-logo';
 import { appMetaTags } from '~/utils/meta';
 
 import type { Route } from './+types/signin';
 
 export function meta() {
-  return appMetaTags(msg`Sign In`);
+  return appMetaTags(msg`Sign in`);
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -117,6 +118,8 @@ export default function SignIn({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="w-screen max-w-lg px-4">
+      <BrandingLogo className="mb-6 h-8 w-auto" />
+
       <div className="z-10 rounded-xl border border-border bg-neutral-100 p-6 dark:bg-background">
         {signupError && (
           <Alert variant="destructive" className="mb-4">
@@ -125,11 +128,11 @@ export default function SignIn({ loaderData }: Route.ComponentProps) {
         )}
 
         <h1 className="font-semibold text-2xl">
-          <Trans>Sign in to your account</Trans>
+          <Trans>Sign in</Trans>
         </h1>
 
         <p className="mt-2 text-muted-foreground text-sm">
-          <Trans>Welcome back, we are lucky to have you.</Trans>
+          <Trans>For Media eXperience staff. To sign a document, use the link in your email.</Trans>
         </p>
         <hr className="-mx-6 my-4" />
 
