@@ -11,16 +11,18 @@ export function meta({ params: { slug } }: Route.MetaArgs) {
     return undefined;
   }
 
+  const description = 'Documents sent for signature by Media eXperience d.o.o., Belgrade.';
+
   return [
-    { title: 'Documenso - Share' },
-    { description: 'I just signed a document in style with Documenso!' },
+    { title: 'Media eXperience' },
+    { name: 'description', content: description },
     {
       property: 'og:title',
-      content: 'Documenso - Join the open source signing revolution',
+      content: 'Media eXperience - Document signing',
     },
     {
       property: 'og:description',
-      content: 'I just signed with Documenso!',
+      content: description,
     },
     {
       property: 'og:type',
@@ -28,11 +30,7 @@ export function meta({ params: { slug } }: Route.MetaArgs) {
     },
     {
       property: 'og:image',
-      content: `${NEXT_PUBLIC_WEBAPP_URL()}/share/${slug}/opengraph`,
-    },
-    {
-      name: 'twitter:site',
-      content: '@documenso',
+      content: `${NEXT_PUBLIC_WEBAPP_URL()}/opengraph-image.jpg`,
     },
     {
       name: 'twitter:card',
@@ -40,11 +38,11 @@ export function meta({ params: { slug } }: Route.MetaArgs) {
     },
     {
       name: 'twitter:image',
-      content: `${NEXT_PUBLIC_WEBAPP_URL()}/share/${slug}/opengraph`,
+      content: `${NEXT_PUBLIC_WEBAPP_URL()}/opengraph-image.jpg`,
     },
     {
       name: 'twitter:description',
-      content: 'I just signed with Documenso!',
+      content: description,
     },
   ];
 }
@@ -69,8 +67,7 @@ export const loader = async ({ request, params: { slug } }: Route.LoaderArgs) =>
     return {};
   }
 
-  // Is hardcoded because this whole meta is hardcoded anyway for Documenso.
-  throw redirect('https://documenso.com');
+  throw redirect('https://www.mediax.plus');
 };
 
 export default function SharePage() {
