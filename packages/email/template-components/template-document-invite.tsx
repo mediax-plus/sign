@@ -44,8 +44,7 @@ export const TemplateDocumentInvite = ({
           {match({ selfSigner, organisationType, includeSenderDetails, teamName })
             .with({ selfSigner: true }, () => (
               <Trans>
-                Please {_(actionVerb).toLowerCase()} your document
-                <br />"{documentName}"
+                Please {_(actionVerb).toLowerCase()} your document “{documentName}”
               </Trans>
             ))
             .with(
@@ -56,32 +55,29 @@ export const TemplateDocumentInvite = ({
               },
               () => (
                 <Trans>
-                  {inviterName} on behalf of "{teamName}" has invited you to {_(actionVerb).toLowerCase()}
-                  <br />"{documentName}"
+                  {inviterName} of {teamName} has sent you “{documentName}” to {_(actionVerb).toLowerCase()}
                 </Trans>
               ),
             )
             .with({ organisationType: OrganisationType.ORGANISATION, teamName: P.string }, () => (
               <Trans>
-                {teamName} has invited you to {_(actionVerb).toLowerCase()}
-                <br />"{documentName}"
+                {teamName} has sent you “{documentName}” to {_(actionVerb).toLowerCase()}
               </Trans>
             ))
             .otherwise(() => (
               <Trans>
-                {inviterName} has invited you to {_(actionVerb).toLowerCase()}
-                <br />"{documentName}"
+                {inviterName} has sent you “{documentName}” to {_(actionVerb).toLowerCase()}
               </Trans>
             ))}
         </Text>
 
         <Text className="my-1 text-center text-base text-muted-foreground">
           {match(role)
-            .with(RecipientRole.SIGNER, () => <Trans>Continue by signing the document.</Trans>)
-            .with(RecipientRole.VIEWER, () => <Trans>Continue by viewing the document.</Trans>)
-            .with(RecipientRole.APPROVER, () => <Trans>Continue by approving the document.</Trans>)
+            .with(RecipientRole.SIGNER, () => <Trans>Please review the document and sign it online.</Trans>)
+            .with(RecipientRole.VIEWER, () => <Trans>Please review the document online.</Trans>)
+            .with(RecipientRole.APPROVER, () => <Trans>Please review the document and approve it online.</Trans>)
             .with(RecipientRole.CC, () => '')
-            .with(RecipientRole.ASSISTANT, () => <Trans>Continue by assisting with the document.</Trans>)
+            .with(RecipientRole.ASSISTANT, () => <Trans>Please review the document and assist with it online.</Trans>)
             .exhaustive()}
         </Text>
 
@@ -91,11 +87,11 @@ export const TemplateDocumentInvite = ({
             href={signDocumentLink}
           >
             {match(role)
-              .with(RecipientRole.SIGNER, () => <Trans>View Document to sign</Trans>)
-              .with(RecipientRole.VIEWER, () => <Trans>View Document</Trans>)
-              .with(RecipientRole.APPROVER, () => <Trans>View Document to approve</Trans>)
+              .with(RecipientRole.SIGNER, () => <Trans>Review and sign</Trans>)
+              .with(RecipientRole.VIEWER, () => <Trans>Review document</Trans>)
+              .with(RecipientRole.APPROVER, () => <Trans>Review and approve</Trans>)
               .with(RecipientRole.CC, () => '')
-              .with(RecipientRole.ASSISTANT, () => <Trans>View Document to assist</Trans>)
+              .with(RecipientRole.ASSISTANT, () => <Trans>Review and assist</Trans>)
               .exhaustive()}
           </Button>
         </Section>

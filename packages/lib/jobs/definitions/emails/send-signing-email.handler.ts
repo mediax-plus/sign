@@ -129,7 +129,7 @@ export const run = async ({ payload, io }: { payload: TSendSigningEmailJobDefini
   const recipientActionVerb = i18n._(RECIPIENT_ROLES_DESCRIPTION[recipient.role].actionVerb).toLowerCase();
 
   let emailMessage = customEmail?.message || '';
-  let emailSubject = i18n._(msg`Please ${recipientActionVerb} this document`);
+  let emailSubject = i18n._(msg`Please ${recipientActionVerb}: ${envelope.title}`);
 
   if (selfSigner) {
     emailMessage = i18n._(
@@ -146,18 +146,8 @@ export const run = async ({ payload, io }: { payload: TSendSigningEmailJobDefini
   }
 
   if (organisationType === OrganisationType.ORGANISATION) {
-    emailSubject = i18n._(msg`${team.name} invited you to ${recipientActionVerb} a document`);
+    emailSubject = i18n._(msg`Please ${recipientActionVerb}: ${envelope.title}`);
     emailMessage = customEmail?.message ?? '';
-
-    if (!emailMessage) {
-      const inviterName = user.name || '';
-
-      emailMessage = i18n._(
-        settings.includeSenderDetails
-          ? msg`${inviterName} on behalf of "${team.name}" has invited you to ${recipientActionVerb} the document "${envelope.title}".`
-          : msg`${team.name} has invited you to ${recipientActionVerb} the document "${envelope.title}".`,
-      );
-    }
   }
 
   const customEmailTemplate = {

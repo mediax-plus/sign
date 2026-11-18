@@ -36,11 +36,11 @@ export const TemplateDocumentCompleted = ({
         </Section>
 
         <Text className="mb-0 text-center font-semibold text-foreground text-lg">
-          {customBody || <Trans>“{documentName}” was signed by all signers</Trans>}
+          {customBody || <Trans>“{documentName}” is signed by all parties</Trans>}
         </Text>
 
         <Text className="my-1 text-center text-base text-muted-foreground">
-          <Trans>Continue by downloading the document.</Trans>
+          <Trans>The signed document is attached to this email.</Trans>
         </Text>
 
         <Section className="mt-8 mb-6 text-center">

@@ -21,7 +21,7 @@ export const DocumentCompletedEmailTemplate = ({
 }: DocumentCompletedEmailTemplateProps) => {
   const { _ } = useLingui();
 
-  const previewText = msg`Completed Document`;
+  const previewText = msg`Signed by all parties`;
 
   return (
     <Html>

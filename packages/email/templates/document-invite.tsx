@@ -49,16 +49,16 @@ export const DocumentInviteEmailTemplate = ({
 
   const action = _(RECIPIENT_ROLES_DESCRIPTION[role].actionVerb).toLowerCase();
 
-  let previewText = msg`${inviterName} has invited you to ${action} ${documentName}`;
+  let previewText = msg`${inviterName} has sent you “${documentName}” to ${action}`;
 
   if (organisationType === OrganisationType.ORGANISATION) {
     previewText = includeSenderDetails
-      ? msg`${inviterName} on behalf of "${teamName}" has invited you to ${action} ${documentName}`
-      : msg`${teamName} has invited you to ${action} ${documentName}`;
+      ? msg`${inviterName} of ${teamName} has sent you “${documentName}” to ${action}`
+      : msg`${teamName} has sent you “${documentName}” to ${action}`;
   }
 
   if (selfSigner) {
-    previewText = msg`Please ${action} your document ${documentName}`;
+    previewText = msg`Please ${action} your document “${documentName}”`;
   }
 
   return (
@@ -105,15 +105,11 @@ export const DocumentInviteEmailTemplate = ({
                 </Text>
               )}
 
-              <Text className="mt-2 text-base text-muted-foreground">
-                {customBody ? (
+              {customBody && (
+                <Text className="mt-2 text-base text-muted-foreground">
                   <TemplateCustomMessageBody text={customBody} />
-                ) : (
-                  <Trans>
-                    {inviterName} has invited you to {action} the document "{documentName}".
-                  </Trans>
-                )}
-              </Text>
+                </Text>
+              )}
             </Section>
           </Container>
 

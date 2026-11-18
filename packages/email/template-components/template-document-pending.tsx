@@ -29,14 +29,12 @@ export const TemplateDocumentPending = ({ documentName, assetBaseUrl }: Template
         </Section>
 
         <Text className="mb-0 text-center font-semibold text-foreground text-lg">
-          <Trans>“{documentName}” has been signed</Trans>
+          <Trans>You signed “{documentName}”</Trans>
         </Text>
 
         <Text className="mx-auto mt-1 mb-6 max-w-[80%] text-center text-base text-muted-foreground">
           <Trans>
-            We're still waiting for other signers to sign this document.
-            <br />
-            We'll notify you as soon as it's ready.
+            We are waiting for the other signers. When everyone has signed, we will email you the signed document.
           </Trans>
         </Text>
       </Section>

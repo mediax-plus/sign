@@ -15,7 +15,7 @@ export const DocumentPendingEmailTemplate = ({
 }: DocumentPendingEmailTemplateProps) => {
   const { _ } = useLingui();
 
-  const previewText = msg`Pending Document`;
+  const previewText = msg`Waiting for the other signers`;
 
   return (
     <Html>

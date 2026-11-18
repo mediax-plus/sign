@@ -19,13 +19,7 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
     <Section>
       {reportUrl && (
         <Text className="my-4 text-base text-muted-foreground">
-          <Trans>
-            Did not expect this email?{' '}
-            <Link className="text-primary" href={reportUrl}>
-              Click here to report the sender
-            </Link>
-            . Never sign a document you don't recognize or weren't expecting.
-          </Trans>
+          <Trans>Not expecting this email? Do not sign it, and reply to let us know.</Trans>
         </Text>
       )}
 
