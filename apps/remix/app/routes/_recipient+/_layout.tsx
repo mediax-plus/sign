@@ -36,6 +36,11 @@ export default function RecipientLayout({ matches }: Route.ComponentProps) {
   return (
     <div className="min-h-screen">
       {!hideHeader && sessionData?.user && <AuthenticatedHeader />}
+      {!hideHeader && !sessionData?.user && (
+        <header className="px-4 pt-5 md:px-[29px]">
+          <img src="/mx-logo-tile.png" alt="Media eXperience" className="h-6 w-auto" />
+        </header>
+      )}
 
       <main
         className={cn({

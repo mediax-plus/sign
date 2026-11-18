@@ -22,7 +22,7 @@ export const appMetaTags = (title?: MessageDescriptor) => {
     },
     {
       property: 'og:title',
-      content: 'Media eXperience - Document signing',
+      content: 'Document signing | Media eXperience',
     },
     {
       property: 'og:description',

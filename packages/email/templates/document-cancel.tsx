@@ -10,7 +10,7 @@ import { TemplateFooter } from '../template-components/template-footer';
 export type DocumentCancelEmailTemplateProps = Partial<TemplateDocumentCancelProps>;
 
 export const DocumentCancelTemplate = ({
-  inviterName = 'Lucas Smith',
+  inviterName = 'Media eXperience',
   inviterEmail = 'lucas@documenso.com',
   documentName = 'Open Source Pledge.pdf',
   assetBaseUrl = 'http://localhost:3002',
