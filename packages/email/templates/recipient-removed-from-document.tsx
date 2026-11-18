@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
-import { keepBrandTogether } from '../template-components/template-mx-styles';
+import { breakableTitle, keepBrandTogether } from '../template-components/template-mx-styles';
 import type { TemplateDocumentCancelProps } from './document-cancel';
 
 export type DocumentCancelEmailTemplateProps = Partial<TemplateDocumentCancelProps>;
@@ -13,6 +13,8 @@ export const RecipientRemovedFromDocumentTemplate = ({
   documentName = 'Open Source Pledge.pdf',
   assetBaseUrl = 'http://localhost:3002',
 }: DocumentCancelEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   // The sender is often the team, so "Media eXperience" is kept on one line.

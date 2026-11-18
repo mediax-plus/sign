@@ -5,6 +5,7 @@ import { Trans } from '@lingui/react/macro';
 import { RecipientRole } from '@prisma/client';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { breakableTitle } from '../template-components/template-mx-styles';
 
 export type DocumentCompletedEmailTemplateProps = {
   recipientName?: string;
@@ -21,6 +22,8 @@ export const DocumentCreatedFromDirectTemplateEmailTemplate = ({
   documentName = 'Open Source Pledge.pdf',
   assetBaseUrl = 'http://localhost:3002',
 }: DocumentCompletedEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const action = _(RECIPIENT_ROLES_DESCRIPTION[recipientRole].actioned).toLowerCase();

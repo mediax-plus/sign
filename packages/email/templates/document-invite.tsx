@@ -7,7 +7,7 @@ import { match, P } from 'ts-pattern';
 
 import { TemplateCustomMessageBody } from '../template-components/template-custom-message-body';
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
-import { keepTogether, MX_COLORS } from '../template-components/template-mx-styles';
+import { breakableTitle, keepTogether, MX_COLORS } from '../template-components/template-mx-styles';
 import { TemplateNewAccountWarning } from '../template-components/template-new-account-warning';
 
 export interface TemplateDocumentInviteProps {
@@ -55,6 +55,8 @@ export const DocumentInviteEmailTemplate = ({
   reportUrl,
   newAccountWarningSenderEmail,
 }: DocumentInviteEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   // The team name never breaks across lines ("Media eXperience" stays together).

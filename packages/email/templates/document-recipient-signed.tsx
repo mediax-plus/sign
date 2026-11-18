@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { breakableTitle } from '../template-components/template-mx-styles';
 
 export interface DocumentRecipientSignedEmailTemplateProps {
   documentName?: string;
@@ -17,6 +18,8 @@ export const DocumentRecipientSignedEmailTemplate = ({
   recipientEmail = 'lucas@documenso.com',
   assetBaseUrl = 'http://localhost:3002',
 }: DocumentRecipientSignedEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const recipientReference = recipientName || recipientEmail;

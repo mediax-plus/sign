@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { breakableTitle } from '../template-components/template-mx-styles';
 
 export interface TemplateDocumentDeleteProps {
   reason: string;
@@ -17,6 +18,8 @@ export const DocumentSuperDeleteEmailTemplate = ({
   assetBaseUrl = 'http://localhost:3002',
   reason = 'Unknown',
 }: DocumentDeleteEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const previewText = msg`An admin has deleted your document "${documentName}".`;

@@ -135,6 +135,8 @@ const isShown = (node: ReactNode) => node !== undefined && node !== null && node
 const MxButton = ({ link, secondary = false }: { link: TemplateMxLetterLink; secondary?: boolean }) => {
   const background = secondary ? MX_COLORS.panel : MX_COLORS.navy;
   const color = secondary ? MX_COLORS.navy : MX_COLORS.white;
+  // The light secondary button gets the chip's 1 px frame; its padding shrinks by 1 px to keep 48 px.
+  const padding = secondary ? '11px 27px' : '12px 28px';
 
   return (
     <table {...mxTableAttrs} className="mxl-btn" style={{ borderCollapse: 'separate', borderSpacing: 0 }}>
@@ -145,9 +147,10 @@ const MxButton = ({ link, secondary = false }: { link: TemplateMxLetterLink; sec
             {...mxLegacyAttrs({ bgcolor: background })}
             style={mxMsoStyle({
               backgroundColor: background,
+              border: secondary ? `1px solid ${MX_COLORS.edge}` : undefined,
               borderRadius: '6px',
               textAlign: 'center',
-              msoPaddingAlt: '12px 28px',
+              msoPaddingAlt: padding,
             })}
           >
             <a
@@ -155,7 +158,7 @@ const MxButton = ({ link, secondary = false }: { link: TemplateMxLetterLink; sec
               target="_blank"
               style={mxMsoStyle({
                 display: 'inline-block',
-                padding: '12px 28px',
+                padding,
                 ...mxText(16, 24, 600, color),
                 msoPaddingAlt: '0',
                 textDecoration: 'none',

@@ -68,5 +68,20 @@ const NBSP = ' ';
 /** Keeps an organisation or team name on one line. */
 export const keepTogether = (name: string) => name.replace(/ /g, NBSP);
 
+/**
+ * Lets a document title made of a file name ("Agreement_2027_SILMA_final_v3.pdf") break after "_",
+ * "-" and "/" and before "." instead of inside a word, with zero-width spaces. Display only: never
+ * use it on links, subjects or attachment names.
+ */
+export function breakableTitle(title: string): string;
+export function breakableTitle(title: string | undefined): string | undefined;
+export function breakableTitle(title: string | undefined) {
+  if (title === undefined) {
+    return title;
+  }
+
+  return title.replace(/([_\/-])(?=\S)/g, '$1\u200B').replace(/(\S)(?=\.)/g, '$1\u200B');
+}
+
 /** Keeps "Media eXperience" on one line inside a longer text, such as the company details. */
 export const keepBrandTogether = (text: string) => text.replace(/Media eXperience/g, `Media${NBSP}eXperience`);

@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { breakableTitle } from '../template-components/template-mx-styles';
 
 export interface TemplateDocumentCompletedProps {
   downloadLink: string;
@@ -21,8 +22,9 @@ export const DocumentCompletedEmailTemplate = ({
   documentName = 'Open Source Pledge.pdf',
   assetBaseUrl = 'http://localhost:3002',
   customBody,
-  reportUrl,
 }: DocumentCompletedEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const previewText = msg`Signed by all parties`;
@@ -36,7 +38,7 @@ export const DocumentCompletedEmailTemplate = ({
       lines={[<Trans>The signed document is attached to this email.</Trans>]}
       chip={{ title: documentName }}
       button={{ label: <Trans>Download</Trans>, href: downloadLink }}
-      footer={{ reportUrl }}
+      footer={{}}
     />
   );
 };

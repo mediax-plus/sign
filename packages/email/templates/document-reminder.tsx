@@ -7,6 +7,7 @@ import { match } from 'ts-pattern';
 
 import { TemplateCustomMessageBody } from '../template-components/template-custom-message-body';
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { breakableTitle } from '../template-components/template-mx-styles';
 import { TemplateNewAccountWarning } from '../template-components/template-new-account-warning';
 
 export type DocumentReminderEmailTemplateProps = {
@@ -30,6 +31,8 @@ export const DocumentReminderEmailTemplate = ({
   reportUrl,
   newAccountWarningSenderEmail,
 }: DocumentReminderEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const { actionVerb } = RECIPIENT_ROLES_DESCRIPTION[role];

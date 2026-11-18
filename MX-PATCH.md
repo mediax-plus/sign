@@ -49,7 +49,9 @@ the v2.22.0 tag.
     smaller margins, and Outlook for Windows gets a fixed 600 px column. Long titles, names and
     links wrap instead of widening the email, and "Media eXperience" never breaks across lines. The
     words of the emails are unchanged, except that the email after signing one's own document no
-    longer offers a free account or links to Documenso's pricing page. New pictures in apps/remix/public/static: email-logo.png
+    longer offers a free account or links to Documenso's pricing page, and the email to people copied
+    on a completed document no longer says "Do not sign it". Document titles made of file names
+    break after "_", "-" and "/" and before "." (zero-width spaces, display only). New pictures in apps/remix/public/static: email-logo.png
     (the wordmark on a white rounded plate, 2x) and doc-chip.png (the page picture, 2x). The
     signing certificate and audit log pages print body text in slate instead of Documenso grey and
     break email addresses only after "@". The signature disclosure page always shows in the light

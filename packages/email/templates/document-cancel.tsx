@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
-import { keepBrandTogether } from '../template-components/template-mx-styles';
+import { breakableTitle, keepBrandTogether } from '../template-components/template-mx-styles';
 
 export interface TemplateDocumentCancelProps {
   inviterName: string;
@@ -21,6 +21,8 @@ export const DocumentCancelTemplate = ({
   assetBaseUrl = 'http://localhost:3002',
   cancellationReason,
 }: DocumentCancelEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   // The sender can be a team, so "Media eXperience" is kept on one line.

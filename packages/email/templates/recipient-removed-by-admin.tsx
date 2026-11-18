@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { breakableTitle } from '../template-components/template-mx-styles';
 
 export type TemplateRecipientRemovedByAdminAudience = 'recipient' | 'owner';
 
@@ -23,6 +24,8 @@ export const RecipientRemovedByAdminEmailTemplate = ({
   recipientEmail = 'lucas@documenso.com',
   assetBaseUrl = 'http://localhost:3002',
 }: RecipientRemovedByAdminEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const previewText =

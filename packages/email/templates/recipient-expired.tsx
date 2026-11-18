@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { breakableTitle } from '../template-components/template-mx-styles';
 
 export type TemplateRecipientExpiredProps = {
   documentName: string;
@@ -21,6 +22,8 @@ export const RecipientExpiredTemplate = ({
   documentLink = 'https://documenso.com',
   assetBaseUrl = 'http://localhost:3002',
 }: RecipientExpiredEmailTemplateProps) => {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const previewText = msg`The signing window for "${recipientName}" on document "${documentName}" has expired.`;

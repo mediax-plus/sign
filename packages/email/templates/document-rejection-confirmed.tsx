@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
 import { TemplateMxLetter } from '../template-components/template-mx-letter';
-import { mxStrong } from '../template-components/template-mx-styles';
+import { breakableTitle, mxStrong } from '../template-components/template-mx-styles';
 
 export type DocumentRejectionConfirmedEmailProps = {
   recipientName: string;
@@ -19,6 +19,8 @@ export function DocumentRejectionConfirmedEmail({
   reason,
   assetBaseUrl = 'http://localhost:3002',
 }: DocumentRejectionConfirmedEmailProps) {
+  documentName = breakableTitle(documentName);
+
   const { _ } = useLingui();
 
   const previewText = _(msg`You have rejected the document '${documentName}'`);
