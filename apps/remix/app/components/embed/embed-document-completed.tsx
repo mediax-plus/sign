@@ -25,7 +25,7 @@ export const EmbedDocumentCompleted = ({ name, signature }: EmbedDocumentComplet
         <Trans>Document Completed</Trans>
       </h2>
 
-      <div className="embed--DocumentCompletedStatus mt-4 flex items-center text-center text-documenso-700">
+      <div className="embed--DocumentCompletedStatus mt-4 flex items-center text-center text-documenso-700 dark:text-documenso-200">
         <CheckCircle2Icon className="mr-2 h-5 w-5" />
         <span className="text-sm">
           <Trans>No further action is required</Trans>
