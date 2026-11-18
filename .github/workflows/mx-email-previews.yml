@@ -1,0 +1,75 @@
+name: MX email previews
+
+# Renders every email with sample data and uploads the HTML as the email-previews artifact, then
+# type-checks the email package and the app. Nothing is sent and nothing is deployed.
+
+on:
+  push:
+    branches:
+      - 'mx/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  previews:
+    name: Render the emails and check the types
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HUSKY: 0
+      NEXT_TELEMETRY_DISABLED: 1
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node 24, as in docker/Dockerfile (node:24-alpine) and the engines field of package.json.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        id: install
+        run: npm ci --no-audit --no-fund
+
+      - name: Generate the Prisma client
+        id: prisma
+        run: npm run prisma:generate -w @documenso/prisma
+
+      # The image build compiles the translation catalogues before its type check; do the same.
+      - name: Compile the translations
+        run: npm run translate:compile
+
+      - name: Render the email previews
+        id: render
+        working-directory: packages/email
+        env:
+          NODE_ENV: development
+        run: node mx-previews/run.mjs "$RUNNER_TEMP/email-previews"
+
+      - name: Upload the previews
+        if: ${{ !cancelled() && steps.prisma.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: email-previews
+          path: ${{ runner.temp }}/email-previews
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Type check the email package
+        if: ${{ !cancelled() && steps.prisma.outcome == 'success' }}
+        run: npx tsc --noEmit -p packages/email/tsconfig.json
+
+      # The same check the image build runs before it builds the app. It covers every file the app
+      # imports, so the certificate code in packages/lib and the email templates are included.
+      - name: Type check the app
+        if: ${{ !cancelled() && steps.prisma.outcome == 'success' }}
+        run: npm run typecheck -w @documenso/remix
