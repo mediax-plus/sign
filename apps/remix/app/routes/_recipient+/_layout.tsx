@@ -5,11 +5,10 @@ import { Button } from '@documenso/ui/primitives/button';
 import { i18n } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { ChevronLeft } from 'lucide-react';
 import { useEffect } from 'react';
-import { isRouteErrorResponse, Link, Outlet } from 'react-router';
+import { isRouteErrorResponse, Outlet } from 'react-router';
 import { Header as AuthenticatedHeader } from '~/components/general/app-header';
-import { GenericErrorLayout } from '~/components/general/generic-error-layout';
+import { defaultErrorCodeMap, GenericErrorLayout } from '~/components/general/generic-error-layout';
 import type { Route } from './+types/_layout';
 
 export function meta() {
@@ -61,13 +60,19 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
     <GenericErrorLayout
       errorCode={errorCode}
+      errorCodeMap={{
+        ...defaultErrorCodeMap,
+        404: {
+          heading: msg`This link isn't valid`,
+          message: msg`If you were asked to sign a document, the link may have expired, or the document may have been withdrawn or sent again with a new link. Reply to the email that brought you here, and Media eXperience will send you a current link.`,
+        },
+      }}
       secondaryButton={null}
       primaryButton={
-        <Button asChild className="w-32">
-          <Link to="/">
-            <ChevronLeft className="mr-2 h-4 w-4" />
-            <Trans>Go Back</Trans>
-          </Link>
+        <Button asChild>
+          <a href="https://www.mediax.plus">
+            <Trans>Go to mediax.plus</Trans>
+          </a>
         </Button>
       }
     />

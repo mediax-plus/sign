@@ -1,16 +1,14 @@
-import backgroundPattern from '@documenso/assets/images/background-pattern.png';
 import { Button } from '@documenso/ui/primitives/button';
 import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import { motion } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
 type ErrorCodeMap = Record<
   number,
-  { subHeading: MessageDescriptor; heading: MessageDescriptor; message: MessageDescriptor }
+  { subHeading?: MessageDescriptor; heading: MessageDescriptor; message: MessageDescriptor }
 >;
 
 export type GenericErrorLayoutProps = {
@@ -34,9 +32,9 @@ export type GenericErrorLayoutProps = {
 
 export const defaultErrorCodeMap: ErrorCodeMap = {
   404: {
-    subHeading: msg`404 not found`,
-    heading: msg`Oops! Something went wrong.`,
-    message: msg`The page you are looking for was moved, removed, renamed or might never have existed.`,
+    subHeading: msg`Page not found`,
+    heading: msg`This page doesn't exist`,
+    message: msg`The address may be mistyped, or the page has moved.`,
   },
   500: {
     subHeading: msg`500 Internal Server Error`,
@@ -59,29 +57,11 @@ export const GenericErrorLayout = ({
 
   return (
     <div className="fixed inset-0 z-0 flex h-screen w-screen items-center justify-center">
-      <div className="absolute -inset-24 -z-10">
-        <motion.div
-          className="flex h-full w-full items-center justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.8, transition: { duration: 0.5, delay: 0.5 } }}
-        >
-          <img
-            src={backgroundPattern}
-            alt="background pattern"
-            className="-mt-[15vh] -ml-[50vw] h-full scale-100 object-cover md:scale-100 lg:scale-[100%] dark:contrast-[70%] dark:invert dark:sepia"
-            style={{
-              mask: 'radial-gradient(rgba(255, 255, 255, 1) 0%, transparent 80%)',
-              WebkitMask: 'radial-gradient(rgba(255, 255, 255, 1) 0%, transparent 80%)',
-            }}
-          />
-        </motion.div>
-      </div>
-
       <div className="inset-0 mx-auto flex h-full flex-grow items-center justify-center px-6 py-32">
         <div>
-          <p className="font-semibold text-muted-foreground">{_(subHeading)}</p>
+          {subHeading && <p className="mb-3 font-semibold text-muted-foreground">{_(subHeading)}</p>}
 
-          <h1 className="mt-3 font-bold text-2xl md:text-3xl">{_(heading)}</h1>
+          <h1 className="font-bold text-2xl md:text-3xl">{_(heading)}</h1>
 
           <p className="mt-4 text-muted-foreground text-sm">{_(message)}</p>
 
@@ -96,7 +76,7 @@ export const GenericErrorLayout = ({
                   }}
                 >
                   <ChevronLeft className="mr-2 h-4 w-4" />
-                  <Trans>Go Back</Trans>
+                  <Trans>Go back</Trans>
                 </Button>
               ))}
 
