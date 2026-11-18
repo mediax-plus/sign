@@ -71,7 +71,7 @@ export const DocumentReminderEmailTemplate = ({
       }
       lines={[<Trans>Hi {recipientName},</Trans>, line]}
       chip={{ title: documentName, href: signDocumentLink }}
-      message={customBody ? <TemplateCustomMessageBody text={customBody} /> : null}
+      message={customBody?.trim() ? <TemplateCustomMessageBody text={customBody} /> : null}
       button={buttonLabel ? { label: buttonLabel, href: signDocumentLink } : undefined}
       footer={{ reportUrl }}
     />

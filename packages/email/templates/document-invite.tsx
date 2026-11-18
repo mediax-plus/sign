@@ -121,10 +121,13 @@ export const DocumentInviteEmailTemplate = ({
     .with(RecipientRole.ASSISTANT, () => <Trans>Review and assist</Trans>)
     .exhaustive();
 
+  // A message made only of spaces or line breaks counts as no message.
+  const hasCustomBody = Boolean(customBody?.trim());
+
   // Personal organisations show who sent the request, next to the sender's message.
   const senderDetails =
     organisationType === OrganisationType.PERSONAL ? (
-      <div style={{ fontWeight: 600, marginBottom: customBody ? '8px' : '0' }}>
+      <div style={{ fontWeight: 600, marginBottom: hasCustomBody ? '8px' : '0' }}>
         <Trans>
           {inviterName}{' '}
           <a
@@ -138,10 +141,10 @@ export const DocumentInviteEmailTemplate = ({
     ) : null;
 
   const message =
-    senderDetails || customBody ? (
+    senderDetails || hasCustomBody ? (
       <>
         {senderDetails}
-        <TemplateCustomMessageBody text={customBody} />
+        {hasCustomBody && <TemplateCustomMessageBody text={customBody} />}
       </>
     ) : null;
 

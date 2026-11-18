@@ -21,7 +21,7 @@ export type TemplateMxLetterLink = {
 };
 
 export type TemplateMxLetterStatus = {
-  /** A 2x picture in static/, shown at 24 x 24 with an empty alt text. */
+  /** A 2x picture in static/, shown at 28 x 28 (the files are 56 x 56) with an empty alt text. */
   picture: 'completed.png' | 'clock.png';
   label: ReactNode;
 };
@@ -241,13 +241,13 @@ export const TemplateMxLetter = ({
       <table {...mxTableAttrs}>
         <tbody>
           <tr>
-            <td width="24" valign="middle" style={{ width: '24px' }}>
+            <td width="28" valign="middle" style={{ width: '28px' }}>
               <img
                 src={getEmailAssetUrl(assetBaseUrl, `static/${status.picture}`)}
-                width={24}
-                height={24}
+                width={28}
+                height={28}
                 alt=""
-                style={{ display: 'block', width: '24px', height: '24px', border: 0 }}
+                style={{ display: 'block', width: '28px', height: '28px', border: 0 }}
               />
             </td>
             <td valign="middle" style={{ paddingLeft: '8px', ...mxText(14, 20, 600, MX_COLORS.navy) }}>
