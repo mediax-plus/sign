@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro';
 import { Outlet } from 'react-router';
 
 import { PublicLegalLinks } from '~/components/general/public-legal-links';
@@ -13,6 +14,17 @@ export default function Layout() {
 
       <footer className="z-10 mt-8 w-full">
         <PublicLegalLinks />
+
+        <div className="mt-2 text-center">
+          <a
+            href="https://github.com/mediax-plus/sign"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#3b4659] text-xs hover:underline dark:text-muted-foreground"
+          >
+            <Trans>Source code</Trans>
+          </a>
+        </div>
       </footer>
     </main>
   );

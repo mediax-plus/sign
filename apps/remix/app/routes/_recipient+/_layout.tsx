@@ -44,6 +44,17 @@ export default function RecipientLayout({ matches }: Route.ComponentProps) {
       >
         <Outlet />
       </main>
+
+      <footer className="pt-2 pb-6 text-center">
+        <a
+          href="https://github.com/mediax-plus/sign"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#3b4659] text-xs hover:underline dark:text-muted-foreground"
+        >
+          <Trans>Source code</Trans>
+        </a>
+      </footer>
     </div>
   );
 }
