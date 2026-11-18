@@ -9,7 +9,6 @@ import type { I18n } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import type { DocumentMeta, Envelope, RecipientRole } from '@prisma/client';
 import Konva from 'konva';
-import type { DateTimeFormatOptions } from 'luxon';
 import { DateTime } from 'luxon';
 import { match, P } from 'ts-pattern';
 import { UAParser } from 'ua-parser-js';
@@ -20,6 +19,7 @@ import { RECIPIENT_ROLES_DESCRIPTION } from '../../constants/recipient-roles';
 import type { TDocumentAuditLog } from '../../types/document-audit-logs';
 import { DOCUMENT_AUDIT_LOG_TYPE } from '../../types/document-audit-logs';
 import { formatDocumentAuditLogAction } from '../../utils/document-audit-logs';
+import { breakTextForWidth } from './break-text';
 import { ensureFontLibrary } from './helpers';
 
 export type AuditLogRecipient = {
@@ -50,6 +50,8 @@ const parser = new UAParser();
 
 const textMutedForegroundLight = '#929DAE';
 const textForeground = '#000';
+const textTitle = '#0b2035';
+const textSlate = '#3b4659';
 const textMutedForeground = '#64748B';
 const textBase = 10;
 const textSm = 9;
@@ -57,7 +59,8 @@ const textXs = 8;
 const fontMedium = '500';
 
 const pageTopMargin = 60;
-const pageBottomMargin = 27;
+const pageBottomMargin = 72;
+const pageFooterMargin = 48;
 const contentMaxWidth = 768;
 const rowPadding = 10;
 const titleFontSize = 18;
@@ -96,7 +99,7 @@ const renderOverviewCardLabels = (options: RenderOverviewCardLabelAndTextOptions
       y: label.height() + labelYSpacing,
       width: width - label.width(),
       fontFamily: 'Inter',
-      text,
+      text: breakTextForWidth({ text, width: width - label.width(), fontSize: textSm }),
       fill: textForeground,
       wrap: 'char',
       fontSize: textSm,
@@ -110,7 +113,7 @@ const renderOverviewCardLabels = (options: RenderOverviewCardLabelAndTextOptions
         y: group.getClientRect().height + 4,
         width: width - label.width(),
         fontFamily: 'Inter',
-        text: '• ' + textValue,
+        text: breakTextForWidth({ text: '• ' + textValue, width: width - label.width(), fontSize: textSm }),
         fill: textForeground,
         wrap: 'char',
         fontSize: textSm,
@@ -242,14 +245,14 @@ const renderOverviewCard = (options: RenderOverviewCardOptions) => {
     label: i18n._(msg`Created At`),
     text: DateTime.fromJSDate(envelope.createdAt)
       .setLocale(APP_I18N_OPTIONS.defaultLocale)
-      .toFormat('yyyy-MM-dd hh:mm:ss a (ZZZZ)'),
+      .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)'),
     width: columnWidth,
   });
   const lastUpdatedLabel = renderOverviewCardLabels({
     label: i18n._(msg`Last Updated`),
     text: DateTime.fromJSDate(envelope.updatedAt)
       .setLocale(APP_I18N_OPTIONS.defaultLocale)
-      .toFormat('yyyy-MM-dd hh:mm:ss a (ZZZZ)'),
+      .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)'),
     width: columnWidth,
     groupX: columnWidth + columnSpacing,
   });
@@ -350,7 +353,9 @@ const renderRow = (options: RenderRowOptions) => {
   const auditLogTimestampText = new Konva.Text({
     x: columnWidth + columnSpacing,
     width: columnWidth,
-    text: DateTime.fromJSDate(auditLog.createdAt).setLocale(APP_I18N_OPTIONS.defaultLocale).toLocaleString(dateFormat),
+    text: DateTime.fromJSDate(auditLog.createdAt)
+      .setLocale(APP_I18N_OPTIONS.defaultLocale)
+      .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)'),
     fontFamily: 'Inter',
     align: 'right',
     fontSize: textSm,
@@ -526,7 +531,7 @@ const renderPages = (options: RenderPagesOptions) => {
       height: pageTopMargin,
       verticalAlign: 'middle',
       text: i18n._(msg`Audit Log`),
-      fill: textForeground,
+      fill: textTitle,
       fontFamily: 'Inter',
       fontSize: titleFontSize,
       fontStyle: '700',
@@ -573,7 +578,7 @@ export async function renderAuditLogs({
 }: GenerateAuditLogsOptions) {
   ensureFontLibrary();
 
-  const minimumMargin = 10;
+  const minimumMargin = 48;
 
   const contentWidth = Math.min(pageWidth - minimumMargin * 2, contentMaxWidth);
   const margin = (pageWidth - contentWidth) / 2;
@@ -620,11 +625,11 @@ export async function renderAuditLogs({
 
     const footerText = new Konva.Text({
       x: margin,
-      y: pageHeight - textXs - 10,
+      y: pageHeight - textXs - pageFooterMargin,
       text: `${i18n._(msg`Envelope ID`)}: ${envelope.id}`,
       fontFamily: 'Inter',
       fontSize: textXs,
-      fill: textMutedForegroundLight,
+      fill: textSlate,
     });
     page.add(footerText);
 
@@ -665,11 +670,11 @@ export async function renderAuditLogs({
 
     const overflowFooterText = new Konva.Text({
       x: margin,
-      y: pageHeight - textXs - 10,
+      y: pageHeight - textXs - pageFooterMargin,
       text: `${i18n._(msg`Envelope ID`)}: ${envelope.id}`,
       fontFamily: 'Inter',
       fontSize: textXs,
-      fill: textMutedForegroundLight,
+      fill: textSlate,
     });
     page.add(overflowFooterText);
 
@@ -688,11 +693,6 @@ export async function renderAuditLogs({
 
   return pages;
 }
-
-const dateFormat: DateTimeFormatOptions = {
-  ...DateTime.DATETIME_SHORT,
-  hourCycle: 'h12',
-};
 
 /**
  * Get the color indicator for the audit log type

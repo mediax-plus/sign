@@ -20,6 +20,7 @@ import { getSignatureFontFamily } from '../../constants/pdf';
 import { RECIPIENT_ROLE_SIGNING_REASONS, RECIPIENT_ROLES_DESCRIPTION } from '../../constants/recipient-roles';
 import type { TDocumentAuditLogBaseSchema } from '../../types/document-audit-logs';
 import { svgToPng } from '../../utils/images/svg-to-png';
+import { breakTextForWidth } from './break-text';
 import { ensureFontLibrary } from './helpers';
 
 type ColumnWidths = [number, number, number];
@@ -75,8 +76,9 @@ const getDevice = (userAgent?: string | null): string => {
   return `${result.os.name} - ${result.browser.name} ${result.browser.version}`;
 };
 
-const textMutedForegroundLight = '#929DAE';
 const textForeground = '#000';
+const textTitle = '#0b2035';
+const textSlate = '#3b4659';
 const textMutedForeground = '#64748B';
 const textRejectedRed = '#dc2626';
 const textBase = 10;
@@ -88,7 +90,8 @@ const columnWidthPercentages = [30, 30, 40];
 const rowPadding = 12;
 const tableHeaderHeight = 38;
 const pageTopMargin = 72;
-const pageBottomMargin = 24;
+const pageBottomMargin = 72;
+const pageFooterMargin = 48;
 const contentMaxWidth = 768;
 
 const titleFontSize = 18;
@@ -131,7 +134,7 @@ const renderLabelAndText = (options: RenderLabelAndTextOptions) => {
     fontFamily: 'Inter',
     text: options.text,
     fill: valueFill,
-    wrap: 'char',
+    wrap: 'word',
     fontSize: textSm,
   });
 
@@ -221,9 +224,14 @@ const renderColumnOne = (options: RenderColumnOptions) => {
   if (recipient.name) {
     const nameText = new Konva.Text({
       y: 0,
-      text: recipient.name,
       fontSize: textBase,
       ...textFontStyling,
+      text: breakTextForWidth({
+        text: recipient.name,
+        width: textFontStyling.width,
+        fontSize: textBase,
+        fontStyle: fontMedium,
+      }),
       fontStyle: fontMedium,
     });
 
@@ -232,7 +240,7 @@ const renderColumnOne = (options: RenderColumnOptions) => {
 
   const emailText = new Konva.Text({
     y: columnGroup.getClientRect().height,
-    text: recipient.email,
+    text: breakTextForWidth({ text: recipient.email, width: textFontStyling.width, fontSize: textBase }),
     fontSize: textBase,
     ...textFontStyling,
   });
@@ -278,7 +286,6 @@ const renderColumnTwo = (options: RenderColumnOptions) => {
   const isRejected = Boolean(recipient.logs.rejected);
 
   if (recipient.signatureField?.secondaryId) {
-    // Signature container with green border
     const signatureContainer = new Konva.Group({ x: 0, y: 0 });
 
     const minSignatureHeight = 40;
@@ -333,22 +340,11 @@ const renderColumnTwo = (options: RenderColumnOptions) => {
       y: 2,
       width: maxSignatureWidth,
       height: signatureHeight,
-      stroke: 'rgba(122, 196, 85, 0.6)',
+      stroke: '#e6e6e6',
       strokeWidth: 1,
       cornerRadius: 8,
     });
     signatureContainer.add(signatureBorder);
-
-    const signatureShadow = new Konva.Rect({
-      x: 0,
-      y: 0,
-      width: maxSignatureWidth + 4,
-      height: signatureHeight + 4,
-      stroke: 'rgba(122, 196, 85, 0.1)',
-      strokeWidth: 4,
-      cornerRadius: 8,
-    });
-    signatureContainer.add(signatureShadow);
 
     // Signature ID
     const sigIdLabel = new Konva.Text({
@@ -368,8 +364,8 @@ const renderColumnTwo = (options: RenderColumnOptions) => {
       x: 0,
       y: column.getClientRect().height,
       text: recipient.signatureField.secondaryId.toUpperCase(),
-      fill: textMutedForeground,
-      fontFamily: 'monospace',
+      fill: textSlate,
+      fontFamily: 'Inter',
       fontSize: textSm,
       width: columnWidth,
       wrap: 'char',
@@ -426,11 +422,11 @@ const renderColumnThree = (options: RenderColumnOptions) => {
       value: recipient.logs.emailed
         ? DateTime.fromJSDate(recipient.logs.emailed.createdAt)
             .setLocale(APP_I18N_OPTIONS.defaultLocale)
-            .toFormat('yyyy-MM-dd hh:mm:ss a (ZZZZ)')
+            .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)')
         : recipient.logs.sent
           ? DateTime.fromJSDate(recipient.logs.sent.createdAt)
               .setLocale(APP_I18N_OPTIONS.defaultLocale)
-              .toFormat('yyyy-MM-dd hh:mm:ss a (ZZZZ)')
+              .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)')
           : i18n._(msg`Unknown`),
     },
     {
@@ -438,7 +434,7 @@ const renderColumnThree = (options: RenderColumnOptions) => {
       value: recipient.logs.opened
         ? DateTime.fromJSDate(recipient.logs.opened.createdAt)
             .setLocale(APP_I18N_OPTIONS.defaultLocale)
-            .toFormat('yyyy-MM-dd hh:mm:ss a (ZZZZ)')
+            .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)')
         : i18n._(msg`Unknown`),
     },
   ];
@@ -448,7 +444,7 @@ const renderColumnThree = (options: RenderColumnOptions) => {
       label: i18n._(msg`Rejected`),
       value: DateTime.fromJSDate(recipient.logs.rejected.createdAt)
         .setLocale(APP_I18N_OPTIONS.defaultLocale)
-        .toFormat('yyyy-MM-dd hh:mm:ss a (ZZZZ)'),
+        .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)'),
       labelFill: textRejectedRed,
       valueFill: textRejectedRed,
     });
@@ -458,7 +454,7 @@ const renderColumnThree = (options: RenderColumnOptions) => {
       value: recipient.logs.completed
         ? DateTime.fromJSDate(recipient.logs.completed.createdAt)
             .setLocale(APP_I18N_OPTIONS.defaultLocale)
-            .toFormat('yyyy-MM-dd hh:mm:ss a (ZZZZ)')
+            .toFormat('yyyy-MM-dd HH:mm:ss (ZZZZ)')
         : i18n._(msg`Unknown`),
     });
   }
@@ -471,7 +467,7 @@ const renderColumnThree = (options: RenderColumnOptions) => {
       recipient.signingStatus === SigningStatus.REJECTED
         ? recipient.rejectionReason || ''
         : isOwner
-          ? i18n._(msg`I am the owner of this document`)
+          ? i18n._(msg`I am the sender of this document`)
           : i18n._(RECIPIENT_ROLE_SIGNING_REASONS[recipient.role]),
   });
 
@@ -727,7 +723,7 @@ export async function renderCertificate({
 }: GenerateCertificateOptions) {
   ensureFontLibrary();
 
-  const minimumMargin = 10;
+  const minimumMargin = 48;
 
   const tableWidth = Math.min(pageWidth - minimumMargin * 2, contentMaxWidth);
   const tableContentWidth = tableWidth - rowPadding * 2;
@@ -775,6 +771,7 @@ export async function renderCertificate({
       height: pageTopMargin,
       verticalAlign: 'middle',
       text: i18n._(msg`Signing Certificate`),
+      fill: textTitle,
       fontFamily: 'Inter',
       fontSize: titleFontSize,
       fontStyle: '700',
@@ -805,11 +802,11 @@ export async function renderCertificate({
 
     const footerText = new Konva.Text({
       x: margin,
-      y: pageHeight - textXs - 10,
+      y: pageHeight - textXs - pageFooterMargin,
       text: `${i18n._(msg`Envelope ID`)}: ${envelopeId}`,
       fontFamily: 'Inter',
       fontSize: textXs,
-      fill: textMutedForegroundLight,
+      fill: textSlate,
     });
     page.add(footerText);
 
@@ -833,11 +830,11 @@ export async function renderCertificate({
 
     const overflowFooterText = new Konva.Text({
       x: margin,
-      y: pageHeight - textXs - 10,
+      y: pageHeight - textXs - pageFooterMargin,
       text: `${i18n._(msg`Envelope ID`)}: ${envelopeId}`,
       fontFamily: 'Inter',
       fontSize: textXs,
-      fill: textMutedForegroundLight,
+      fill: textSlate,
     });
     page.add(overflowFooterText);
 

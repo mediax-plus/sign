@@ -27,7 +27,7 @@ import { BrandingLogo } from '~/components/general/branding-logo';
 import type { Route } from './+types/certificate';
 
 const FRIENDLY_SIGNING_REASONS = {
-  ['__OWNER__']: msg`I am the owner of this document`,
+  ['__OWNER__']: msg`I am the sender of this document`,
   ...RECIPIENT_ROLE_SIGNING_REASONS,
 };
 
