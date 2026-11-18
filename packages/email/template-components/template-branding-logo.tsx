@@ -23,10 +23,12 @@ export const TemplateBrandingLogo = ({ assetBaseUrl, className = 'mb-4 h-6' }: T
   if (!hasCustomBrandingLogo) {
     const documensoLogoUrl = getEmailAssetUrl(assetBaseUrl, 'static/logo.png');
 
-    return <Img src={documensoLogoUrl} alt="Media eXperience" className={className} />;
+    return <Img src={documensoLogoUrl} alt="Media eXperience" className={className} width={87} height={24} />;
   }
 
-  const brandingLogo = <Img src={branding.brandingLogo} alt="Media eXperience" className={className} />;
+  const brandingLogo = (
+    <Img src={branding.brandingLogo} alt="Media eXperience" className={className} width={87} height={24} />
+  );
 
   const safeBrandingUrl = getSafeBrandingUrl(branding.brandingUrl);
 

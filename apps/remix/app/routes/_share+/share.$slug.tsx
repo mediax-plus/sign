@@ -11,14 +11,14 @@ export function meta({ params: { slug } }: Route.MetaArgs) {
     return undefined;
   }
 
-  const description = 'Documents sent for signature by Media eXperience d.o.o., Belgrade.';
+  const description = 'Documents to sign from Media eXperience.';
 
   return [
     { title: 'Media eXperience' },
     { name: 'description', content: description },
     {
       property: 'og:title',
-      content: 'Media eXperience - Document signing',
+      content: 'Document signing | Media eXperience',
     },
     {
       property: 'og:description',

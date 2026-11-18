@@ -181,9 +181,9 @@ export default function CompletedSigningPage({ loaderData }: Route.ComponentProp
             />
 
             <h2 className="mt-6 max-w-[35ch] text-center font-semibold text-2xl leading-normal md:text-3xl lg:text-4xl">
-              {recipient.role === RecipientRole.SIGNER && <Trans>Document Signed</Trans>}
-              {recipient.role === RecipientRole.VIEWER && <Trans>Document Viewed</Trans>}
-              {recipient.role === RecipientRole.APPROVER && <Trans>Document Approved</Trans>}
+              {recipient.role === RecipientRole.SIGNER && <Trans>Document signed</Trans>}
+              {recipient.role === RecipientRole.VIEWER && <Trans>Document viewed</Trans>}
+              {recipient.role === RecipientRole.APPROVER && <Trans>Document approved</Trans>}
             </h2>
 
             {match({ status: signingStatus, deletedAt: document.deletedAt })
@@ -223,7 +223,7 @@ export default function CompletedSigningPage({ loaderData }: Route.ComponentProp
             {match({ status: signingStatus, deletedAt: document.deletedAt })
               .with({ status: 'COMPLETED' }, () => (
                 <p className="mt-2.5 max-w-[60ch] text-center font-medium text-muted-foreground/60 text-sm md:text-base">
-                  <Trans>Everyone has signed! You will receive an email copy of the signed document.</Trans>
+                  <Trans>We will email you a copy of the signed document.</Trans>
                 </p>
               ))
               .with({ status: 'PROCESSING' }, () => (
@@ -236,7 +236,7 @@ export default function CompletedSigningPage({ loaderData }: Route.ComponentProp
               ))
               .with({ deletedAt: null }, () => (
                 <p className="mt-2.5 max-w-[60ch] text-center font-medium text-muted-foreground/60 text-sm md:text-base">
-                  <Trans>You will receive an email copy of the signed document once everyone has signed.</Trans>
+                  <Trans>We will email you a copy of the signed document once everyone has signed.</Trans>
                 </p>
               ))
               .otherwise(() => (

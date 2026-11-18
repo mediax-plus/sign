@@ -171,7 +171,7 @@ export const EnvelopeEditorUploadPage = () => {
         return {
           id: nanoid(),
           envelopeItemId: isEmbedded ? `${PRESIGNED_ENVELOPE_ITEM_ID_PREFIX}${nanoid()}` : null,
-          title: file.name,
+          title: file.name.replace(/\.pdf$/i, '') || file.name,
           file,
           isUploading: isEmbedded ? false : true,
           isReplacing: false,

@@ -14,20 +14,23 @@ the v2.22.0 tag.
 2. Theme: MX navy (#0b2035), slate (#3b4659) and light grey (#e6e6e6) replace the Documenso green in
    the theme stylesheet, the Tailwind colour scale, the email colour defaults and the web manifest,
    with dark-mode colours where the old green was used for text or icons.
-3. Logo: the MX logo (apps/remix/public/mx-logo-tile.png) replaces the Documenso logo in the app
-   header, the mobile menu and the signing header.
+3. Logo and pictures: the MX logo (apps/remix/public/mx-logo-tile.png) replaces the Documenso logo
+   in the app header, the mobile menu and the signing header. The favicons, the link-preview image,
+   the web manifest and the email pictures in apps/remix/public are MX files, robots.txt keeps
+   search engines out, and Documenso's security.txt is removed.
 4. Sign-in page: a heading and a line for Media eXperience staff, the MX logo above the card, and no
    background pattern.
 5. Error pages: plain wording for missing pages and for signing links that are no longer valid, with
    one button to www.mediax.plus on the latter, and no background pattern.
-6. Emails: new subjects, headings and text for the signing request, waiting and completed emails; a
-   footer that asks partners to reply; logo and image alt texts; the organisation invitation no
-   longer names Documenso.
+6. Emails: new subjects, headings and text for the signing request, reminder, waiting and completed
+   emails; a footer that asks partners to reply; logo and image alt texts and fixed image sizes; MX
+   navy and slate text colours; the organisation invitation and the welcome email for accounts made
+   by an administrator no longer name Documenso.
 7. File names: completed-email attachments no longer end in ".pdf.pdf", and new documents take the
    file name without a trailing ".pdf" as their title.
-8. Signing certificate and audit log pages in the sealed PDF: 48 px side and bottom margins, names
-   wrapped between words and emails after "@" or ".", MX colours, 24-hour times, and the reason
-   "I am the sender of this document" for the document owner.
+8. Signing certificate and audit log pages in the sealed PDF: 48 px top, side and bottom margins,
+   names wrapped between words and emails after "@" or ".", MX colours, 24-hour times, and the
+   reason "I am the sender of this document" for the document owner.
 9. The page after signing has no Share button.
 10. Other partner-facing text: the signature disclosure, the cancelled-document page, the passkey and
     authenticator names and the web manifest name Media eXperience.

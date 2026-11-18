@@ -222,7 +222,7 @@ export const resendDocument = async ({ id, userId, recipients, teamId, requestMe
       const recipientActionVerb = i18n._(RECIPIENT_ROLES_DESCRIPTION[recipient.role].actionVerb).toLowerCase();
 
       let emailMessage = envelope.documentMeta.message || '';
-      let emailSubject = i18n._(msg`Reminder: Please ${recipientActionVerb} this document`);
+      let emailSubject = i18n._(msg`Reminder: please ${recipientActionVerb} ${envelope.title}`);
 
       if (selfSigner) {
         emailMessage = i18n._(
@@ -232,17 +232,7 @@ export const resendDocument = async ({ id, userId, recipients, teamId, requestMe
       }
 
       if (organisationType === OrganisationType.ORGANISATION) {
-        emailSubject = i18n._(msg`Reminder: ${envelope.team.name} invited you to ${recipientActionVerb} a document`);
-
-        if (!emailMessage) {
-          const inviterName = user.name || user.email;
-
-          emailMessage = i18n._(
-            settings.includeSenderDetails
-              ? msg`${inviterName} on behalf of "${envelope.team.name}" has invited you to ${recipientActionVerb} the document "${envelope.title}".`
-              : msg`${envelope.team.name} has invited you to ${recipientActionVerb} the document "${envelope.title}".`,
-          );
-        }
+        emailSubject = i18n._(msg`Reminder: please ${recipientActionVerb} ${envelope.title}`);
       }
 
       const customEmailTemplate = {

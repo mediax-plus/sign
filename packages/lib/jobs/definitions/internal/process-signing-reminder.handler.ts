@@ -4,7 +4,6 @@ import { msg } from '@lingui/core/macro';
 import {
   DocumentDistributionMethod,
   DocumentStatus,
-  OrganisationType,
   RecipientRole,
   SendStatus,
   SigningStatus,
@@ -106,7 +105,6 @@ export const run = async ({ payload, io }: { payload: TProcessSigningReminderJob
   const {
     branding,
     emailLanguage,
-    organisationType,
     senderEmail,
     replyToEmail,
     organisationId,
@@ -133,11 +131,7 @@ export const run = async ({ payload, io }: { payload: TProcessSigningReminderJob
 
   const recipientActionVerb = i18n._(RECIPIENT_ROLES_DESCRIPTION[recipient.role].actionVerb).toLowerCase();
 
-  let emailSubject = i18n._(msg`Reminder: Please ${recipientActionVerb} the document "${envelope.title}"`);
-
-  if (organisationType === OrganisationType.ORGANISATION) {
-    emailSubject = i18n._(msg`Reminder: ${envelope.team.name} invited you to ${recipientActionVerb} a document`);
-  }
+  let emailSubject = i18n._(msg`Reminder: please ${recipientActionVerb} ${envelope.title}`);
 
   const customEmailTemplate = {
     'signer.name': recipient.name,

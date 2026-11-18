@@ -38,8 +38,8 @@ export const defaultErrorCodeMap: ErrorCodeMap = {
   },
   500: {
     subHeading: msg`500 Internal Server Error`,
-    heading: msg`Oops! Something went wrong.`,
-    message: msg`An unexpected error occurred.`,
+    heading: msg`Something went wrong`,
+    message: msg`Please try again in a moment.`,
   },
 };
 

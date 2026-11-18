@@ -67,7 +67,7 @@ export const UNSAFE_createEnvelopeItems = async ({
 
       return {
         id: prefixedId('envelope_item'),
-        title: file.name,
+        title: file.name.replace(/\.pdf$/i, '') || file.name,
         clientId,
         documentDataId: documentData.id,
         placeholders,

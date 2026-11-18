@@ -27,6 +27,8 @@ export const TemplateDocumentSelfSigned = ({ documentName, assetBaseUrl }: Templ
                 src={getEmailAssetUrl(assetBaseUrl, 'static/completed.png')}
                 className="-mt-0.5 mr-2 inline h-7 w-7 align-middle"
                 alt=""
+                width={28}
+                height={28}
               />
               <Trans>Completed</Trans>
             </Text>
@@ -56,6 +58,8 @@ export const TemplateDocumentSelfSigned = ({ documentName, assetBaseUrl }: Templ
               src={getEmailAssetUrl(assetBaseUrl, 'static/user-plus.png')}
               className="mr-2 mb-0.5 inline h-5 w-5 align-middle"
               alt=""
+              width={20}
+              height={20}
             />
             <Trans>Create account</Trans>
           </Button>
@@ -68,6 +72,8 @@ export const TemplateDocumentSelfSigned = ({ documentName, assetBaseUrl }: Templ
               src={getEmailAssetUrl(assetBaseUrl, 'static/review.png')}
               className="mr-2 mb-0.5 inline h-5 w-5 align-middle"
               alt=""
+              width={20}
+              height={20}
             />
             <Trans>View plans</Trans>
           </Button>

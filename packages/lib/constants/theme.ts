@@ -21,17 +21,17 @@ import type { TCssVarsSchema } from '../types/css-vars';
  */
 export const DEFAULT_BRAND_COLORS = {
   background: '#ffffff', //              0 0% 100%
-  foreground: '#0f172a', //              222.2 47.4% 11.2%
+  foreground: '#0b2035', //              210 65.6% 12.5%
   muted: '#f1f5f9', //                   210 40% 96.1%
-  mutedForeground: '#64748b', //         215.4 16.3% 46.9%
+  mutedForeground: '#3b4659', //         218 20.3% 29%
   popover: '#ffffff', //                 0 0% 100%
-  popoverForeground: '#0f172a', //       222.2 47.4% 11.2%
+  popoverForeground: '#0b2035', //       210 65.6% 12.5%
   card: '#ffffff', //                    0 0% 100%
   cardBorder: '#e2e8f0', //              214.3 31.8% 91.4%
-  cardForeground: '#0f172a', //          222.2 47.4% 11.2%
+  cardForeground: '#0b2035', //          210 65.6% 12.5%
   fieldCard: '#e2f8d3', //               95 74% 90%
   fieldCardBorder: '#a2e771', //         95.08 71.08% 67.45%
-  fieldCardForeground: '#0f172a', //     222.2 47.4% 11.2%
+  fieldCardForeground: '#0b2035', //     210 65.6% 12.5%
   widget: '#f7f7f7', //                  0 0% 97%
   widgetForeground: '#f2f2f2', //        0 0% 95%
   border: '#e2e8f0', //                  214.3 31.8% 91.4%
@@ -39,9 +39,9 @@ export const DEFAULT_BRAND_COLORS = {
   primary: '#0b2035', //                 210 65.6% 12.5%
   primaryForeground: '#ffffff', //       0 0% 100%
   secondary: '#f1f5f9', //               210 40% 96.1%
-  secondaryForeground: '#0f172a', //     222.2 47.4% 11.2%
+  secondaryForeground: '#0b2035', //     210 65.6% 12.5%
   accent: '#f1f5f9', //                  210 40% 96.1%
-  accentForeground: '#0f172a', //        222.2 47.4% 11.2%
+  accentForeground: '#0b2035', //        210 65.6% 12.5%
   destructive: '#ff0000', //             0 100% 50%
   destructiveForeground: '#f8fafc', //   210 40% 98%
   ring: '#3b4659', //                    218 20.3% 29%
