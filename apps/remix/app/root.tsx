@@ -133,12 +133,26 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const matches = useMatches();
   const isRecipientRoute = matches.some((m) => m.id?.startsWith('routes/_recipient+'));
 
+  // The signature disclosure is a partner page and always shows in the light theme. The
+  // dark-mode-disabled class switches off the dark colours and every dark: style from the first
+  // paint, so there is no dark flash before hydration.
+  const isLightOnlyRoute = matches.some((m) => m.id === 'routes/_unauthenticated+/articles.signature-disclosure');
+
+  const htmlClassName = [theme, isLightOnlyRoute ? 'dark-mode-disabled' : null].filter(Boolean).join(' ');
+
   return (
     // `suppressHydrationWarning` because `remix-themes` intentionally mutates
     // `data-theme`/`class` on <html> before hydration (PreventFlashOnWrongTheme),
     // so the server-rendered attributes never match the client render when the
     // theme is resolved from the system preference. Attribute-only, one level deep.
-    <html translate="no" lang={lang} data-theme={theme} className={theme ?? ''} suppressHydrationWarning>
+    <html
+      translate="no"
+      lang={lang}
+      data-theme={theme}
+      className={htmlClassName}
+      style={isLightOnlyRoute ? { colorScheme: 'light' } : undefined}
+      suppressHydrationWarning
+    >
       <head>
         <meta charSet="utf-8" />
         <link rel="apple-touch-icon" sizes="180x180" href={`${basePath}/apple-touch-icon.png`} />

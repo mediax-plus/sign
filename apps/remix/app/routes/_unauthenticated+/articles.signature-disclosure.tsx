@@ -3,10 +3,18 @@ import { Button } from '@documenso/ui/primitives/button';
 import { Trans } from '@lingui/react/macro';
 import { Link } from 'react-router';
 
+import { BrandingLogo } from '~/components/general/branding-logo';
+
+/**
+ * Partners open this page from the signing screen. It always shows in the light theme (the root
+ * layout turns dark mode off for this route), with MX navy headings and links and slate text.
+ */
 export default function SignatureDisclosure() {
   return (
-    <div>
-      <article className="prose dark:prose-invert">
+    <div className="w-full max-w-[65ch]">
+      <BrandingLogo className="mb-8 h-8 w-auto" />
+
+      <article className="prose [--tw-prose-body:#3b4659] [--tw-prose-bold:#0b2035] [--tw-prose-bullets:#3b4659] [--tw-prose-headings:#0b2035] [--tw-prose-links:#0b2035]">
         <h1>
           <Trans>Electronic Signature Disclosure</Trans>
         </h1>
