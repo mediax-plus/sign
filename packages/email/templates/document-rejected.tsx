@@ -1,10 +1,8 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Html, Preview, Section } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import { TemplateDocumentRejected } from '../template-components/template-document-rejected';
-import { TemplateFooter } from '../template-components/template-footer';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
 
 type DocumentRejectedEmailProps = {
   recipientName: string;
@@ -25,33 +23,23 @@ export function DocumentRejectedEmail({
 
   const previewText = _(msg`${recipientName} has rejected the document '${documentName}'`);
 
+  const signerName = recipientName;
+
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{previewText}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateDocumentRejected
-                recipientName={recipientName}
-                documentName={documentName}
-                documentUrl={documentUrl}
-                rejectionReason={rejectionReason}
-              />
-            </Section>
-          </Container>
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={previewText}
+      heading={<Trans>Document Rejected</Trans>}
+      lines={[
+        <Trans>
+          {signerName} has rejected the document "{documentName}".
+        </Trans>,
+        <Trans>You can view the document and its status by clicking the button below.</Trans>,
+      ]}
+      chip={{ title: documentName }}
+      message={rejectionReason ? <Trans>Reason for rejection: {rejectionReason}</Trans> : null}
+      button={{ label: <Trans>View Document</Trans>, href: documentUrl }}
+    />
   );
 }
 

@@ -1,11 +1,15 @@
+import { env } from '@documenso/lib/utils/env';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Html, Preview, Section } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import type { TemplateDocumentSelfSignedProps } from '../template-components/template-document-self-signed';
-import { TemplateDocumentSelfSigned } from '../template-components/template-document-self-signed';
-import { TemplateFooter } from '../template-components/template-footer';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { mxInlineLink } from '../template-components/template-mx-styles';
+
+export interface TemplateDocumentSelfSignedProps {
+  documentName: string;
+  assetBaseUrl: string;
+}
 
 export type DocumentSelfSignedTemplateProps = TemplateDocumentSelfSignedProps;
 
@@ -15,29 +19,32 @@ export const DocumentSelfSignedEmailTemplate = ({
 }: DocumentSelfSignedTemplateProps) => {
   const { _ } = useLingui();
 
+  const NEXT_PUBLIC_WEBAPP_URL = env('NEXT_PUBLIC_WEBAPP_URL');
+
+  const signUpUrl = `${NEXT_PUBLIC_WEBAPP_URL ?? 'http://localhost:3000'}/signup`;
+
   const previewText = msg`Completed Document`;
 
+  // The buttons lead to an account, not to the document, so the chip below is not a link.
   return (
-    <Html>
-      <Head />
-      <Body className="mx-auto my-auto font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section className="bg-background">
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-2 backdrop-blur-sm">
-            <Section className="p-2">
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateDocumentSelfSigned documentName={documentName} assetBaseUrl={assetBaseUrl} />
-            </Section>
-          </Container>
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      status={{ picture: 'completed.png', label: <Trans>Completed</Trans> }}
+      heading={<Trans>You have signed “{documentName}”</Trans>}
+      lines={[
+        <Trans>
+          Create a{' '}
+          <a href={signUpUrl} target="_blank" style={{ ...mxInlineLink, whiteSpace: 'nowrap' }}>
+            free account
+          </a>{' '}
+          to access your signed documents at any time.
+        </Trans>,
+      ]}
+      chip={{ title: documentName, href: null }}
+      button={{ label: <Trans>Create account</Trans>, href: signUpUrl }}
+      secondaryButton={{ label: <Trans>View plans</Trans>, href: 'https://documenso.com/pricing' }}
+    />
   );
 };
 

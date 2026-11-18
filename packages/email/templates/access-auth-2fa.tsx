@@ -1,10 +1,9 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Plural, Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Html, Preview, Section } from '../components';
-import { TemplateAccessAuth2FA } from '../template-components/template-access-auth-2fa';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import { TemplateFooter } from '../template-components/template-footer';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { MX_COLORS, mxLegacyAttrs, mxTableAttrs, mxText } from '../template-components/template-mx-styles';
 
 export type AccessAuth2FAEmailTemplateProps = {
   documentTitle: string;
@@ -18,7 +17,6 @@ export type AccessAuth2FAEmailTemplateProps = {
 export const AccessAuth2FAEmailTemplate = ({
   documentTitle,
   code,
-  userEmail,
   userName,
   expiresInMinutes,
   assetBaseUrl = 'http://localhost:3002',
@@ -28,36 +26,44 @@ export const AccessAuth2FAEmailTemplate = ({
   const previewText = msg`Your verification code is ${code}`;
 
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateAccessAuth2FA
-                documentTitle={documentTitle}
-                code={code}
-                userEmail={userEmail}
-                userName={userName}
-                expiresInMinutes={expiresInMinutes}
-                assetBaseUrl={assetBaseUrl}
-              />
-            </Section>
-          </Container>
-
-          <div className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Verification Code Required</Trans>}
+      lines={[
+        <Trans>
+          Hi {userName}, you need to enter a verification code to complete the document "{documentTitle}".
+        </Trans>,
+      ]}
+      extra={
+        <table {...mxTableAttrs} width="100%" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
+          <tbody>
+            <tr>
+              <td
+                {...mxLegacyAttrs({ bgcolor: MX_COLORS.panel })}
+                style={{ backgroundColor: MX_COLORS.panel, borderRadius: '6px', padding: '16px 20px' }}
+              >
+                <div style={mxText(14, 20, 600, MX_COLORS.slate)}>
+                  <Trans>Your verification code:</Trans>
+                </div>
+                <div style={{ marginTop: '4px', letterSpacing: '0.12em', ...mxText(28, 36, 700, MX_COLORS.navy) }}>
+                  {code}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      }
+      notes={[
+        <Plural
+          value={expiresInMinutes}
+          one="This code will expire in # minute."
+          other="This code will expire in # minutes."
+        />,
+        <Trans>If you didn't request this verification code, you can safely ignore this email.</Trans>,
+      ]}
+      footer={{ isDocument: false }}
+    />
   );
 };
 

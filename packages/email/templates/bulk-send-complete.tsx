@@ -1,8 +1,8 @@
 import { msg, Trans } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 
-import { Body, Container, Head, Html, Preview, Section, Text } from '../components';
-import { TemplateFooter } from '../template-components/template-footer';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { MX_COLORS, mxText } from '../template-components/template-mx-styles';
 
 export interface BulkSendCompleteEmailProps {
   userName: string;
@@ -14,6 +14,10 @@ export interface BulkSendCompleteEmailProps {
   assetBaseUrl?: string;
 }
 
+const subheadingStyle = mxText(16, 24, 600, MX_COLORS.navy);
+
+const listStyle = { margin: '4px 0 0 0', padding: '0 0 0 20px' };
+
 export const BulkSendCompleteEmail = ({
   userName,
   templateName,
@@ -21,74 +25,64 @@ export const BulkSendCompleteEmail = ({
   successCount,
   failedCount,
   errors,
+  assetBaseUrl = 'http://localhost:3002',
 }: BulkSendCompleteEmailProps) => {
   const { _ } = useLingui();
 
   const previewText = msg`Bulk send operation complete for template "${templateName}"`;
 
   return (
-    <Html>
-      <Head />
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Your bulk send operation for template "{templateName}" has completed.</Trans>}
+      lines={[<Trans>Hi {userName},</Trans>]}
+      extra={
+        <>
+          <div style={subheadingStyle}>
+            <Trans>Summary:</Trans>
+          </div>
 
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <Text className="text-sm">
-                <Trans>Hi {userName},</Trans>
-              </Text>
+          <ul style={listStyle}>
+            <li>
+              <Trans>Total rows processed: {totalProcessed}</Trans>
+            </li>
+            <li style={{ marginTop: '4px' }}>
+              <Trans>Successfully created: {successCount}</Trans>
+            </li>
+            <li style={{ marginTop: '4px' }}>
+              <Trans>Failed: {failedCount}</Trans>
+            </li>
+          </ul>
 
-              <Text className="text-sm">
-                <Trans>Your bulk send operation for template "{templateName}" has completed.</Trans>
-              </Text>
+          {errors && errors.length > 0 && (
+            <>
+              <div style={{ marginTop: '16px', ...subheadingStyle }}>
+                <Trans>The following errors occurred:</Trans>
+              </div>
 
-              <Text className="font-semibold text-lg">
-                <Trans>Summary:</Trans>
-              </Text>
-
-              <ul className="my-2 ml-4 list-inside list-disc">
-                <li>
-                  <Trans>Total rows processed: {totalProcessed}</Trans>
-                </li>
-                <li className="mt-1">
-                  <Trans>Successfully created: {successCount}</Trans>
-                </li>
-                <li className="mt-1">
-                  <Trans>Failed: {failedCount}</Trans>
-                </li>
+              <ul style={listStyle}>
+                {errors.map((error, index) => (
+                  <li
+                    key={index}
+                    style={{ marginTop: index > 0 ? '4px' : '0', ...mxText(14, 20, 400, MX_COLORS.error) }}
+                  >
+                    {error}
+                  </li>
+                ))}
               </ul>
+            </>
+          )}
 
-              {errors && errors.length > 0 && (
-                <Section className="mt-4">
-                  <Text className="font-semibold text-lg">
-                    <Trans>The following errors occurred:</Trans>
-                  </Text>
-
-                  <ul className="my-2 ml-4 list-inside list-disc">
-                    {errors.map((error, index) => (
-                      <li key={index} className="mt-1 text-destructive text-sm">
-                        {error}
-                      </li>
-                    ))}
-                  </ul>
-                </Section>
-              )}
-
-              <Text className="text-sm">
-                <Trans>
-                  You can view the created documents in your dashboard under the "Documents created from template"
-                  section.
-                </Trans>
-              </Text>
-            </Section>
-          </Container>
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+          <div style={{ marginTop: '16px' }}>
+            <Trans>
+              You can view the created documents in your dashboard under the "Documents created from template"
+              section.
+            </Trans>
+          </div>
+        </>
+      }
+      footer={{ isDocument: false }}
+    />
   );
 };

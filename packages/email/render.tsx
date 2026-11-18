@@ -7,6 +7,7 @@ import * as ReactEmail from '@react-email/render';
 
 import { Tailwind } from './components';
 import { BrandingProvider, type BrandingSettings } from './providers/branding';
+import { applyMsoConditionals } from './utils/mso';
 
 export type RenderOptions = ReactEmail.Options & {
   branding?: BrandingSettings;
@@ -62,7 +63,7 @@ export const render = async (element: React.ReactNode, options?: RenderOptions) 
 
   const tailwindColors = buildEmailColors(branding?.brandingColors);
 
-  return ReactEmail.render(
+  const html = await ReactEmail.render(
     <BrandingProvider branding={branding}>
       <Tailwind
         config={{
@@ -78,6 +79,8 @@ export const render = async (element: React.ReactNode, options?: RenderOptions) 
     </BrandingProvider>,
     otherOptions,
   );
+
+  return applyMsoConditionals(html);
 };
 
 export const renderWithI18N = async (element: React.ReactNode, options?: RenderOptions) => {
@@ -89,7 +92,7 @@ export const renderWithI18N = async (element: React.ReactNode, options?: RenderO
 
   const tailwindColors = buildEmailColors(branding?.brandingColors);
 
-  return ReactEmail.render(
+  const html = await ReactEmail.render(
     <I18nProvider i18n={i18n}>
       <BrandingProvider branding={branding}>
         <Tailwind
@@ -107,4 +110,6 @@ export const renderWithI18N = async (element: React.ReactNode, options?: RenderO
     </I18nProvider>,
     otherOptions,
   );
+
+  return applyMsoConditionals(html);
 };

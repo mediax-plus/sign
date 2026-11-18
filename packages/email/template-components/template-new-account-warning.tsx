@@ -1,31 +1,49 @@
 import { Trans } from '@lingui/react/macro';
 
-import { Container, Link, Text } from '../components';
+import { MX_COLORS, mxLegacyAttrs, mxTableAttrs, mxText, mxWrap } from './template-mx-styles';
 
 export type TemplateNewAccountWarningProps = {
   senderEmail: string;
   reportUrl?: string;
 };
 
+/** A yellow notice above the card of the letter layout, for requests sent from a new account. */
 export const TemplateNewAccountWarning = ({ senderEmail, reportUrl }: TemplateNewAccountWarningProps) => {
   return (
-    <Container className="mx-auto mt-8 max-w-xl rounded-lg border border-warning border-l-4 border-solid bg-[#fdfae6] px-4 py-3">
-      <Text className="my-0 font-semibold text-foreground text-sm">
-        <Trans>Warning: This was sent from a new account ({senderEmail})</Trans>
-      </Text>
+    <table {...mxTableAttrs} width="100%" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
+      <tbody>
+        <tr>
+          <td
+            {...mxLegacyAttrs({ bgcolor: MX_COLORS.warningPanel })}
+            style={{
+              backgroundColor: MX_COLORS.warningPanel,
+              border: `1px solid ${MX_COLORS.warningEdge}`,
+              borderLeft: `4px solid ${MX_COLORS.warningEdge}`,
+              borderRadius: '8px',
+              padding: '12px 16px',
+              ...mxText(14, 20, 400, MX_COLORS.slate),
+              ...mxWrap,
+            }}
+          >
+            <div style={{ fontWeight: 600, color: MX_COLORS.navy }}>
+              <Trans>Warning: This was sent from a new account ({senderEmail})</Trans>
+            </div>
 
-      <Text className="mt-1 mb-0 text-muted-foreground text-sm">
-        {reportUrl ? (
-          <Trans>
-            Only sign if you know and were expecting this sender.{' '}
-            <Link className="text-foreground underline" href={reportUrl}>
-              Report sender
-            </Link>
-          </Trans>
-        ) : (
-          <Trans>Only sign if you know and were expecting this sender.</Trans>
-        )}
-      </Text>
-    </Container>
+            <div style={{ marginTop: '4px' }}>
+              {reportUrl ? (
+                <Trans>
+                  Only sign if you know and were expecting this sender.{' '}
+                  <a style={{ color: MX_COLORS.navy, textDecoration: 'underline' }} href={reportUrl}>
+                    Report sender
+                  </a>
+                </Trans>
+              ) : (
+                <Trans>Only sign if you know and were expecting this sender.</Trans>
+              )}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 };

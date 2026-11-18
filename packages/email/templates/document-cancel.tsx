@@ -1,55 +1,47 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Hr, Html, Preview, Section } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import type { TemplateDocumentCancelProps } from '../template-components/template-document-cancel';
-import { TemplateDocumentCancel } from '../template-components/template-document-cancel';
-import { TemplateFooter } from '../template-components/template-footer';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { keepBrandTogether } from '../template-components/template-mx-styles';
+
+export interface TemplateDocumentCancelProps {
+  inviterName: string;
+  inviterEmail: string;
+  documentName: string;
+  assetBaseUrl: string;
+  cancellationReason?: string;
+}
 
 export type DocumentCancelEmailTemplateProps = Partial<TemplateDocumentCancelProps>;
 
 export const DocumentCancelTemplate = ({
-  inviterName = 'Media eXperience',
-  inviterEmail = 'lucas@documenso.com',
+  inviterName: inviterNameProp = 'Media eXperience',
   documentName = 'Open Source Pledge.pdf',
   assetBaseUrl = 'http://localhost:3002',
   cancellationReason,
 }: DocumentCancelEmailTemplateProps) => {
   const { _ } = useLingui();
 
+  // The sender can be a team, so "Media eXperience" is kept on one line.
+  const inviterName = keepBrandTogether(inviterNameProp);
+
   const previewText = msg`${inviterName} has cancelled the document ${documentName}, you don't need to sign it anymore.`;
 
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateDocumentCancel
-                inviterName={inviterName}
-                inviterEmail={inviterEmail}
-                documentName={documentName}
-                assetBaseUrl={assetBaseUrl}
-                cancellationReason={cancellationReason}
-              />
-            </Section>
-          </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={
+        <Trans>
+          {inviterName} has cancelled the document
+          <br />"{documentName}"
+        </Trans>
+      }
+      lines={[<Trans>All signatures have been voided.</Trans>, <Trans>You don't need to sign it anymore.</Trans>]}
+      chip={{ title: documentName }}
+      message={cancellationReason ? <Trans>Reason for cancellation: {cancellationReason}</Trans> : null}
+    />
   );
 };
 

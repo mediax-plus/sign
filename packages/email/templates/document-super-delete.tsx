@@ -1,13 +1,14 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Hr, Html, Preview, Section } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import {
-  TemplateDocumentDelete,
-  type TemplateDocumentDeleteProps,
-} from '../template-components/template-document-super-delete';
-import { TemplateFooter } from '../template-components/template-footer';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+
+export interface TemplateDocumentDeleteProps {
+  reason: string;
+  documentName: string;
+  assetBaseUrl: string;
+}
 
 export type DocumentDeleteEmailTemplateProps = Partial<TemplateDocumentDeleteProps>;
 
@@ -21,29 +22,20 @@ export const DocumentSuperDeleteEmailTemplate = ({
   const previewText = msg`An admin has deleted your document "${documentName}".`;
 
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateDocumentDelete reason={reason} documentName={documentName} assetBaseUrl={assetBaseUrl} />
-            </Section>
-          </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Your document has been deleted by an admin!</Trans>}
+      lines={[
+        <Trans>"{documentName}" has been deleted by an admin.</Trans>,
+        <Trans>
+          This document can not be recovered, if you would like to dispute the reason for future documents please
+          contact support.
+        </Trans>,
+        <Trans>The reason provided for deletion is the following:</Trans>,
+      ]}
+      message={reason}
+    />
   );
 };
 

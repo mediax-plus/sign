@@ -1,11 +1,15 @@
+import { SUPPORT_EMAIL } from '@documenso/lib/constants/app';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Html, Img, Preview, Section } from '../components';
-import type { TemplateAdminUserCreatedProps } from '../template-components/template-admin-user-created';
-import { TemplateAdminUserCreated } from '../template-components/template-admin-user-created';
-import { TemplateFooter } from '../template-components/template-footer';
-import { getEmailAssetUrl } from '../utils/asset-url';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { mxInlineLink } from '../template-components/template-mx-styles';
+
+export type TemplateAdminUserCreatedProps = {
+  resetPasswordLink: string;
+  assetBaseUrl: string;
+};
 
 export const AdminUserCreatedTemplate = ({
   resetPasswordLink,
@@ -16,33 +20,29 @@ export const AdminUserCreatedTemplate = ({
   const previewText = msg`Set your password for Media eXperience document signing`;
 
   return (
-    <Html>
-      <Head />
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <Img
-                src={getEmailAssetUrl(assetBaseUrl, 'static/logo.png')}
-                alt="Media eXperience"
-                className="mb-4 h-6"
-                width={87}
-                height={24}
-              />
-
-              <TemplateAdminUserCreated resetPasswordLink={resetPasswordLink} assetBaseUrl={assetBaseUrl} />
-            </Section>
-          </Container>
-          <div className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Welcome to Media eXperience document signing</Trans>}
+      lines={[
+        <Trans>An administrator has created an account for you.</Trans>,
+        <Trans>To get started, please set your password by clicking the button below:</Trans>,
+      ]}
+      button={{ label: <Trans>Set Password</Trans>, href: resetPasswordLink }}
+      notes={[
+        <Trans>
+          You can also copy and paste this link into your browser: {resetPasswordLink} (link expires in 24 hours)
+        </Trans>,
+        <Trans>
+          If you didn't expect this account or have any questions, please{' '}
+          <a href={`mailto:${SUPPORT_EMAIL}`} style={mxInlineLink}>
+            contact support
+          </a>
+          .
+        </Trans>,
+      ]}
+      footer={{ isDocument: false }}
+    />
   );
 };
 

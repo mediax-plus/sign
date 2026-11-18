@@ -1,11 +1,16 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Hr, Html, Preview, Section } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import { TemplateFooter } from '../template-components/template-footer';
-import type { TemplateRecipientExpiredProps } from '../template-components/template-recipient-expired';
-import { TemplateRecipientExpired } from '../template-components/template-recipient-expired';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+
+export type TemplateRecipientExpiredProps = {
+  documentName: string;
+  recipientName: string;
+  recipientEmail: string;
+  documentLink: string;
+  assetBaseUrl: string;
+};
 
 export type RecipientExpiredEmailTemplateProps = Partial<TemplateRecipientExpiredProps>;
 
@@ -20,36 +25,26 @@ export const RecipientExpiredTemplate = ({
 
   const previewText = msg`The signing window for "${recipientName}" on document "${documentName}" has expired.`;
 
+  const displayName = recipientName || recipientEmail;
+
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateRecipientExpired
-                documentName={documentName}
-                recipientName={recipientName}
-                recipientEmail={recipientEmail}
-                documentLink={documentLink}
-                assetBaseUrl={assetBaseUrl}
-              />
-            </Section>
-          </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={
+        <Trans>
+          Signing window expired for "{displayName}" on "{documentName}"
+        </Trans>
+      }
+      lines={[
+        <Trans>
+          The signing window for {displayName} on document "{documentName}" has expired. You can resend the document
+          to extend their deadline or cancel the document.
+        </Trans>,
+      ]}
+      chip={{ title: documentName }}
+      button={{ label: <Trans>View Document</Trans>, href: documentLink }}
+    />
   );
 };
 

@@ -2,16 +2,26 @@ import { RECIPIENT_ROLES_DESCRIPTION } from '@documenso/lib/constants/recipient-
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
-import type { RecipientRole } from '@prisma/client';
-import { OrganisationType } from '@prisma/client';
+import { OrganisationType, RecipientRole } from '@prisma/client';
+import { match, P } from 'ts-pattern';
 
-import { Body, Container, Head, Hr, Html, Link, Preview, Section, Text } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import { TemplateCustomMessageBody } from '../template-components/template-custom-message-body';
-import type { TemplateDocumentInviteProps } from '../template-components/template-document-invite';
-import { TemplateDocumentInvite } from '../template-components/template-document-invite';
-import { TemplateFooter } from '../template-components/template-footer';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { keepTogether, MX_COLORS } from '../template-components/template-mx-styles';
 import { TemplateNewAccountWarning } from '../template-components/template-new-account-warning';
+
+export interface TemplateDocumentInviteProps {
+  inviterName: string;
+  inviterEmail: string;
+  documentName: string;
+  signDocumentLink: string;
+  assetBaseUrl: string;
+  role: RecipientRole;
+  selfSigner: boolean;
+  teamName?: string;
+  includeSenderDetails?: boolean;
+  organisationType?: OrganisationType;
+}
 
 export type DocumentInviteEmailTemplateProps = Partial<TemplateDocumentInviteProps> & {
   customBody?: string;
@@ -39,13 +49,18 @@ export const DocumentInviteEmailTemplate = ({
   customBody,
   role,
   selfSigner = false,
-  teamName = '',
+  teamName: teamNameProp = '',
   includeSenderDetails,
   organisationType,
   reportUrl,
   newAccountWarningSenderEmail,
 }: DocumentInviteEmailTemplateProps) => {
   const { _ } = useLingui();
+
+  // The team name never breaks across lines ("Media eXperience" stays together).
+  const teamName = keepTogether(teamNameProp);
+
+  const { actionVerb } = RECIPIENT_ROLES_DESCRIPTION[role];
 
   const action = _(RECIPIENT_ROLES_DESCRIPTION[role].actionVerb).toLowerCase();
 
@@ -61,66 +76,91 @@ export const DocumentInviteEmailTemplate = ({
     previewText = msg`Please ${action} your document “${documentName}”`;
   }
 
+  const heading = match({ selfSigner, organisationType, includeSenderDetails, teamName })
+    .with({ selfSigner: true }, () => (
+      <Trans>
+        Please {_(actionVerb).toLowerCase()} your document “{documentName}”
+      </Trans>
+    ))
+    .with(
+      {
+        organisationType: OrganisationType.ORGANISATION,
+        includeSenderDetails: true,
+        teamName: P.string,
+      },
+      () => (
+        <Trans>
+          {inviterName} of {teamName} has sent you “{documentName}” to {_(actionVerb).toLowerCase()}
+        </Trans>
+      ),
+    )
+    .with({ organisationType: OrganisationType.ORGANISATION, teamName: P.string }, () => (
+      <Trans>
+        {teamName} has sent you “{documentName}” to {_(actionVerb).toLowerCase()}
+      </Trans>
+    ))
+    .otherwise(() => (
+      <Trans>
+        {inviterName} has sent you “{documentName}” to {_(actionVerb).toLowerCase()}
+      </Trans>
+    ));
+
+  const line = match(role)
+    .with(RecipientRole.SIGNER, () => <Trans>Please review the document and sign it online.</Trans>)
+    .with(RecipientRole.VIEWER, () => <Trans>Please review the document online.</Trans>)
+    .with(RecipientRole.APPROVER, () => <Trans>Please review the document and approve it online.</Trans>)
+    .with(RecipientRole.CC, () => '')
+    .with(RecipientRole.ASSISTANT, () => <Trans>Please review the document and assist with it online.</Trans>)
+    .exhaustive();
+
+  const buttonLabel = match(role)
+    .with(RecipientRole.SIGNER, () => <Trans>Review and sign</Trans>)
+    .with(RecipientRole.VIEWER, () => <Trans>Review document</Trans>)
+    .with(RecipientRole.APPROVER, () => <Trans>Review and approve</Trans>)
+    .with(RecipientRole.CC, () => '')
+    .with(RecipientRole.ASSISTANT, () => <Trans>Review and assist</Trans>)
+    .exhaustive();
+
+  // Personal organisations show who sent the request, next to the sender's message.
+  const senderDetails =
+    organisationType === OrganisationType.PERSONAL ? (
+      <div style={{ fontWeight: 600, marginBottom: customBody ? '8px' : '0' }}>
+        <Trans>
+          {inviterName}{' '}
+          <a
+            style={{ fontWeight: 400, color: MX_COLORS.slate, textDecoration: 'none' }}
+            href={`mailto:${inviterEmail}`}
+          >
+            ({inviterEmail})
+          </a>
+        </Trans>
+      </div>
+    ) : null;
+
+  const message =
+    senderDetails || customBody ? (
+      <>
+        {senderDetails}
+        <TemplateCustomMessageBody text={customBody} />
+      </>
+    ) : null;
+
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          {newAccountWarningSenderEmail && (
-            <TemplateNewAccountWarning senderEmail={newAccountWarningSenderEmail} reportUrl={reportUrl} />
-          )}
-
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateDocumentInvite
-                inviterName={inviterName}
-                inviterEmail={inviterEmail}
-                documentName={documentName}
-                signDocumentLink={signDocumentLink}
-                assetBaseUrl={assetBaseUrl}
-                role={role}
-                selfSigner={selfSigner}
-                organisationType={organisationType}
-                teamName={teamName}
-                includeSenderDetails={includeSenderDetails}
-              />
-            </Section>
-          </Container>
-
-          <Container className="mx-auto mt-12 max-w-xl">
-            <Section>
-              {organisationType === OrganisationType.PERSONAL && (
-                <Text className="my-4 font-semibold text-base">
-                  <Trans>
-                    {inviterName}{' '}
-                    <Link className="font-normal text-muted-foreground" href={`mailto:${inviterEmail}`}>
-                      ({inviterEmail})
-                    </Link>
-                  </Trans>
-                </Text>
-              )}
-
-              {customBody && (
-                <Text className="mt-2 text-base text-muted-foreground">
-                  <TemplateCustomMessageBody text={customBody} />
-                </Text>
-              )}
-            </Section>
-          </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter reportUrl={reportUrl} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      aboveCard={
+        newAccountWarningSenderEmail ? (
+          <TemplateNewAccountWarning senderEmail={newAccountWarningSenderEmail} reportUrl={reportUrl} />
+        ) : null
+      }
+      heading={heading}
+      lines={[line]}
+      chip={{ title: documentName, href: signDocumentLink }}
+      message={message}
+      button={buttonLabel ? { label: buttonLabel, href: signDocumentLink } : undefined}
+      footer={{ reportUrl }}
+    />
   );
 };
 

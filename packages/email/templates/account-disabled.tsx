@@ -1,11 +1,14 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Html, Img, Preview, Section } from '../components';
-import type { TemplateAccountDisabledProps } from '../template-components/template-account-disabled';
-import { TemplateAccountDisabled } from '../template-components/template-account-disabled';
-import { TemplateFooter } from '../template-components/template-footer';
-import { getEmailAssetUrl } from '../utils/asset-url';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { mxInlineLink } from '../template-components/template-mx-styles';
+
+export type TemplateAccountDisabledProps = {
+  assetBaseUrl: string;
+  supportEmail: string;
+};
 
 export type AccountDisabledEmailTemplateProps = Partial<TemplateAccountDisabledProps>;
 
@@ -18,34 +21,26 @@ export const AccountDisabledEmailTemplate = ({
   const previewText = msg`Your Documenso account has been disabled`;
 
   return (
-    <Html>
-      <Head />
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <Img
-                src={getEmailAssetUrl(assetBaseUrl, 'static/logo.png')}
-                alt="Media eXperience"
-                className="mb-4 h-6"
-                width={87}
-                height={24}
-              />
-
-              <TemplateAccountDisabled assetBaseUrl={assetBaseUrl} supportEmail={supportEmail} />
-            </Section>
-          </Container>
-
-          <div className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Your account has been disabled</Trans>}
+      lines={[
+        <Trans>
+          One of your signing requests has been reported. As part of keeping signers safe, we've disabled your account
+          for now.
+        </Trans>,
+        <Trans>You won't be able to sign in or send documents while it is disabled.</Trans>,
+        <Trans>
+          If you believe this was a mistake, contact us at{' '}
+          <a href={`mailto:${supportEmail}`} style={mxInlineLink}>
+            {supportEmail}
+          </a>
+          .
+        </Trans>,
+      ]}
+      footer={{ isDocument: false }}
+    />
   );
 };
 

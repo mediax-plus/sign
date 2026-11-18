@@ -2,10 +2,8 @@ import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
-import { Body, Button, Container, Head, Hr, Html, Preview, Section, Text } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import { TemplateFooter } from '../template-components/template-footer';
-import TemplateImage from '../template-components/template-image';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { keepTogether, mxStrong } from '../template-components/template-mx-styles';
 
 type OrganisationAccountLinkConfirmationTemplateProps = {
   type: 'create' | 'link';
@@ -17,10 +15,12 @@ type OrganisationAccountLinkConfirmationTemplateProps = {
 export const OrganisationAccountLinkConfirmationTemplate = ({
   type = 'link',
   confirmationLink = '<CONFIRMATION_LINK>',
-  organisationName = '<ORGANISATION_NAME>',
+  organisationName: organisationNameProp = '<ORGANISATION_NAME>',
   assetBaseUrl = 'http://localhost:3002',
 }: OrganisationAccountLinkConfirmationTemplateProps) => {
   const { _ } = useLingui();
+
+  const organisationName = keepTogether(organisationNameProp);
 
   const previewText =
     type === 'create'
@@ -28,94 +28,26 @@ export const OrganisationAccountLinkConfirmationTemplate = ({
       : msg`A request has been made to link your Documenso account`;
 
   return (
-    <Html>
-      <Head />
-      <Body className="mx-auto my-auto font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section className="bg-background">
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid px-2 pt-2 backdrop-blur-sm">
-            <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6 p-2" />
-
-            <Section>
-              <TemplateImage className="mx-auto h-12 w-12" assetBaseUrl={assetBaseUrl} staticAsset="building-2.png" />
-            </Section>
-
-            <Section className="p-2 text-muted-foreground">
-              <Text className="text-center font-medium text-foreground text-lg">
-                {type === 'create' ? (
-                  <Trans>Account creation request</Trans>
-                ) : (
-                  <Trans>Link your Documenso account</Trans>
-                )}
-              </Text>
-
-              <Text className="text-center text-base">
-                {type === 'create' ? (
-                  <Trans>
-                    <span className="font-bold">{organisationName}</span> has requested to create an account on your
-                    behalf.
-                  </Trans>
-                ) : (
-                  <Trans>
-                    <span className="font-bold">{organisationName}</span> has requested to link your current Documenso
-                    account to their organisation.
-                  </Trans>
-                )}
-              </Text>
-
-              {/* Placeholder text if we want to have the warning in the email as well. */}
-              {/* <Section className="mt-6">
-                <Text className="my-0 text-sm">
-                  <Trans>
-                    By accepting this request, you will be granting{' '}
-                    <strong>{organisationName}</strong> full access to:
-                  </Trans>
-                </Text>
-
-                <ul className="mb-0 mt-2">
-                  <li className="text-sm">
-                    <Trans>Your account, and everything associated with it</Trans>
-                  </li>
-                  <li className="mt-1 text-sm">
-                    <Trans>Something something something</Trans>
-                  </li>
-                  <li className="mt-1 text-sm">
-                    <Trans>Something something something</Trans>
-                  </li>
-                </ul>
-
-                <Text className="mt-2 text-sm">
-                  <Trans>
-                    You can unlink your account at any time in your security settings on Documenso{' '}
-                    <Link href={`${assetBaseUrl}/settings/security/linked-accounts`}>here.</Link>
-                  </Trans>
-                </Text>
-              </Section> */}
-
-              <Section className="mt-8 mb-6 text-center">
-                <Button
-                  className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-primary-foreground text-sm no-underline"
-                  href={confirmationLink}
-                >
-                  <Trans>Review request</Trans>
-                </Button>
-              </Section>
-            </Section>
-
-            <Text className="text-center text-muted-foreground text-xs">
-              <Trans>Link expires in 30 minutes.</Trans>
-            </Text>
-          </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={type === 'create' ? <Trans>Account creation request</Trans> : <Trans>Link your Documenso account</Trans>}
+      lines={[
+        type === 'create' ? (
+          <Trans>
+            <span style={mxStrong}>{organisationName}</span> has requested to create an account on your behalf.
+          </Trans>
+        ) : (
+          <Trans>
+            <span style={mxStrong}>{organisationName}</span> has requested to link your current Documenso account to
+            their organisation.
+          </Trans>
+        ),
+      ]}
+      button={{ label: <Trans>Review request</Trans>, href: confirmationLink }}
+      notes={[<Trans>Link expires in 30 minutes.</Trans>]}
+      footer={{ isDocument: false }}
+    />
   );
 };
 

@@ -1,14 +1,18 @@
 import { SUPPORT_EMAIL } from '@documenso/lib/constants/app';
 import type { TPasswordChangeSource } from '@documenso/lib/jobs/definitions/emails/send-password-reset-success-email';
+import { env } from '@documenso/lib/utils/env';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Hr, Html, Link, Preview, Section, Text } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import { TemplateFooter } from '../template-components/template-footer';
-import type { TemplateResetPasswordProps } from '../template-components/template-reset-password';
-import { TemplateResetPassword } from '../template-components/template-reset-password';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { MX_COLORS, mxInlineLink } from '../template-components/template-mx-styles';
+
+export interface TemplateResetPasswordProps {
+  userName: string;
+  userEmail: string;
+  assetBaseUrl: string;
+}
 
 export type ResetPasswordTemplateProps = Partial<TemplateResetPasswordProps> & {
   source?: TPasswordChangeSource;
@@ -22,77 +26,56 @@ export const ResetPasswordTemplate = ({
 }: ResetPasswordTemplateProps) => {
   const { _ } = useLingui();
 
+  const NEXT_PUBLIC_WEBAPP_URL = env('NEXT_PUBLIC_WEBAPP_URL');
+
   const previewText = source === 'RESET' ? msg`Password Reset Successful` : msg`Your password was changed`;
 
+  const greeting = (
+    <span style={{ fontWeight: 600, color: MX_COLORS.navy }}>
+      <Trans>
+        Hi, {userName}{' '}
+        <a style={{ fontWeight: 400, color: MX_COLORS.slate, textDecoration: 'none' }} href={`mailto:${userEmail}`}>
+          ({userEmail})
+        </a>
+      </Trans>
+    </span>
+  );
+
+  const sourceLines =
+    source === 'RESET'
+      ? [
+          <Trans>We've changed your password as you asked. You can now sign in with your new password.</Trans>,
+          <Trans>
+            Didn't request a password change? We are here to help you secure your account, just{' '}
+            <a style={mxInlineLink} href={`mailto:${SUPPORT_EMAIL}`}>
+              contact us
+            </a>
+            .
+          </Trans>,
+        ]
+      : [
+          <Trans>Your password was just changed from your account security settings.</Trans>,
+          <Trans>
+            If this was you, no action is needed. If it wasn't, reset your password immediately and{' '}
+            <a style={mxInlineLink} href={`mailto:${SUPPORT_EMAIL}`}>
+              contact us
+            </a>
+            .
+          </Trans>,
+        ];
+
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateResetPassword userName={userName} userEmail={userEmail} assetBaseUrl={assetBaseUrl} />
-            </Section>
-          </Container>
-
-          <Container className="mx-auto mt-12 max-w-xl">
-            <Section>
-              <Text className="my-4 font-semibold text-base">
-                <Trans>
-                  Hi, {userName}{' '}
-                  <Link className="font-normal text-muted-foreground" href={`mailto:${userEmail}`}>
-                    ({userEmail})
-                  </Link>
-                </Trans>
-              </Text>
-
-              {source === 'RESET' ? (
-                <>
-                  <Text className="mt-2 text-base text-muted-foreground">
-                    <Trans>We've changed your password as you asked. You can now sign in with your new password.</Trans>
-                  </Text>
-                  <Text className="mt-2 text-base text-muted-foreground">
-                    <Trans>
-                      Didn't request a password change? We are here to help you secure your account, just{' '}
-                      <Link className="font-normal text-primary" href={`mailto:${SUPPORT_EMAIL}`}>
-                        contact us
-                      </Link>
-                      .
-                    </Trans>
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text className="mt-2 text-base text-muted-foreground">
-                    <Trans>Your password was just changed from your account security settings.</Trans>
-                  </Text>
-                  <Text className="mt-2 text-base text-muted-foreground">
-                    <Trans>
-                      If this was you, no action is needed. If it wasn't, reset your password immediately and{' '}
-                      <Link className="font-normal text-primary" href={`mailto:${SUPPORT_EMAIL}`}>
-                        contact us
-                      </Link>
-                      .
-                    </Trans>
-                  </Text>
-                </>
-              )}
-            </Section>
-          </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Password updated!</Trans>}
+      lines={[<Trans>Your password has been updated.</Trans>, greeting, ...sourceLines]}
+      button={{
+        label: <Trans>Sign In</Trans>,
+        href: `${NEXT_PUBLIC_WEBAPP_URL ?? 'http://localhost:3000'}/signin`,
+      }}
+      footer={{ isDocument: false }}
+    />
   );
 };
 

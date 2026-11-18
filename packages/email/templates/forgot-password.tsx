@@ -1,11 +1,13 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Html, Preview, Section } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import { TemplateFooter } from '../template-components/template-footer';
-import type { TemplateForgotPasswordProps } from '../template-components/template-forgot-password';
-import { TemplateForgotPassword } from '../template-components/template-forgot-password';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+
+export type TemplateForgotPasswordProps = {
+  resetPasswordLink: string;
+  assetBaseUrl: string;
+};
 
 export type ForgotPasswordTemplateProps = Partial<TemplateForgotPasswordProps>;
 
@@ -18,29 +20,14 @@ export const ForgotPasswordTemplate = ({
   const previewText = msg`Password Reset Requested`;
 
   return (
-    <Html>
-      <Head />
-
-      <Body className="mx-auto my-auto bg-background font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section>
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid p-4 backdrop-blur-sm">
-            <Section>
-              <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6" />
-
-              <TemplateForgotPassword resetPasswordLink={resetPasswordLink} assetBaseUrl={assetBaseUrl} />
-            </Section>
-          </Container>
-
-          <div className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Forgot your password?</Trans>}
+      lines={[<Trans>That's okay, it happens! Click the button below to reset your password.</Trans>]}
+      button={{ label: <Trans>Reset Password</Trans>, href: resetPasswordLink }}
+      footer={{ isDocument: false }}
+    />
   );
 };
 

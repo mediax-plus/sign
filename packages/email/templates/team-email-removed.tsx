@@ -3,10 +3,8 @@ import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 
-import { Body, Container, Head, Hr, Html, Preview, Section, Text } from '../components';
-import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
-import { TemplateFooter } from '../template-components/template-footer';
-import TemplateImage from '../template-components/template-image';
+import { TemplateMxLetter } from '../template-components/template-mx-letter';
+import { mxStrong } from '../template-components/template-mx-styles';
 
 export type TeamEmailRemovedTemplateProps = {
   assetBaseUrl: string;
@@ -28,44 +26,18 @@ export const TeamEmailRemovedTemplate = ({
   const previewText = msg`Team email removed for ${teamName} on Documenso`;
 
   return (
-    <Html>
-      <Head />
-      <Body className="mx-auto my-auto font-sans">
-        <Preview>{_(previewText)}</Preview>
-
-        <Section className="bg-background text-muted-foreground">
-          <Container className="mx-auto mt-8 mb-2 max-w-xl rounded-lg border border-border border-solid px-2 pt-2 backdrop-blur-sm">
-            <TemplateBrandingLogo assetBaseUrl={assetBaseUrl} className="mb-4 h-6 p-2" />
-
-            <Section>
-              <TemplateImage className="mx-auto" assetBaseUrl={assetBaseUrl} staticAsset="mail-open-alert.png" />
-            </Section>
-
-            <Section className="p-2 text-muted-foreground">
-              <Text className="text-center font-medium text-foreground text-lg">
-                <Trans>Team email removed</Trans>
-              </Text>
-
-              <Text className="my-1 text-center text-base">
-                <Trans>
-                  The team email <span className="font-bold">{teamEmail}</span> has been removed from the following team
-                </Trans>
-              </Text>
-
-              <div className="mx-auto mt-2 mb-6 w-fit rounded-lg bg-muted px-4 py-2 font-medium text-base text-muted-foreground">
-                {formatTeamUrl(teamUrl, baseUrl)}
-              </div>
-            </Section>
-          </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter isDocument={false} />
-          </Container>
-        </Section>
-      </Body>
-    </Html>
+    <TemplateMxLetter
+      assetBaseUrl={assetBaseUrl}
+      previewText={_(previewText)}
+      heading={<Trans>Team email removed</Trans>}
+      lines={[
+        <Trans>
+          The team email <span style={mxStrong}>{teamEmail}</span> has been removed from the following team
+        </Trans>,
+      ]}
+      chip={{ title: formatTeamUrl(teamUrl, baseUrl), picture: false }}
+      footer={{ isDocument: false }}
+    />
   );
 };
 
