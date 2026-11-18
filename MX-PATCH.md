@@ -16,8 +16,10 @@ the v2.22.0 tag.
    with dark-mode colours where the old green was used for text or icons.
 3. Logo and pictures: the MX logo (apps/remix/public/mx-logo-tile.png) replaces the Documenso logo
    in the app header, the mobile menu and the signing header. The favicons, the link-preview image,
-   the web manifest and the email pictures in apps/remix/public are MX files, robots.txt keeps
-   search engines out, and Documenso's security.txt is removed.
+   the web manifest and the email pictures in apps/remix/public are MX files (the email pictures
+   are 2x files drawn on the pixel grid and carry fixed width and height in the templates),
+   robots.txt is the upstream one, and Documenso's security.txt is removed together with the
+   commit hook and script that copied it back into the app.
 4. Sign-in page: a heading and a line for Media eXperience staff, the MX logo above the card, and no
    background pattern.
 5. Error pages: plain wording for missing pages and for signing links that are no longer valid, with
