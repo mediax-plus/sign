@@ -79,7 +79,6 @@ const getDevice = (userAgent?: string | null): string => {
 const textForeground = '#000';
 const textTitle = '#0b2035';
 const textSlate = '#3b4659';
-const textMutedForeground = '#64748B';
 const textRejectedRed = '#dc2626';
 const textBase = 10;
 const textSm = 9;
@@ -121,8 +120,8 @@ const renderLabelAndText = (options: RenderLabelAndTextOptions) => {
     y,
   });
 
-  const labelFill = options.labelFill ?? textMutedForeground;
-  const valueFill = options.valueFill ?? textMutedForeground;
+  const labelFill = options.labelFill ?? textSlate;
+  const valueFill = options.valueFill ?? textSlate;
 
   const label = new Konva.Text({
     x: 0,
@@ -171,7 +170,7 @@ const renderRowHeader = (options: RenderRowHeaderOptions) => {
     fontSize: 11,
     fontStyle: fontMedium,
     verticalAlign: 'middle',
-    fill: textMutedForeground,
+    fill: textSlate,
     height: tableHeaderHeight,
   };
 
@@ -226,7 +225,7 @@ const renderColumnOne = (options: RenderColumnOptions) => {
     fontFamily: 'Inter',
     wrap: 'char',
     lineHeight: 1.2,
-    fill: textMutedForeground,
+    fill: textSlate,
     width: width - columnPadding,
   };
 
@@ -360,7 +359,7 @@ const renderColumnTwo = (options: RenderColumnOptions) => {
       x: 0,
       y: isRejected ? 0 : signatureHeight + 10,
       text: `${i18n._(msg`Signature ID`)}:`,
-      fill: textMutedForeground,
+      fill: textSlate,
       width: columnWidth,
       fontFamily: 'Inter',
       fontSize: textSm,
@@ -385,7 +384,7 @@ const renderColumnTwo = (options: RenderColumnOptions) => {
       x: 0,
       y: 0,
       text: 'N/A',
-      fill: textMutedForeground,
+      fill: textSlate,
       fontFamily: 'Inter',
       fontSize: textSm,
     });

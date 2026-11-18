@@ -52,7 +52,6 @@ const textMutedForegroundLight = '#929DAE';
 const textForeground = '#000';
 const textTitle = '#0b2035';
 const textSlate = '#3b4659';
-const textMutedForeground = '#64748B';
 const textBase = 10;
 const textSm = 9;
 const textXs = 8;
@@ -346,7 +345,7 @@ const renderRow = (options: RenderRowOptions) => {
     fontFamily: 'Inter',
     fontSize: textSm,
     fontStyle: fontMedium,
-    fill: textMutedForeground,
+    fill: textSlate,
   });
 
   const auditLogDescriptionText = new Konva.Text({
@@ -368,7 +367,7 @@ const renderRow = (options: RenderRowOptions) => {
     fontFamily: 'Inter',
     align: 'right',
     fontSize: textSm,
-    fill: textMutedForeground,
+    fill: textSlate,
   });
 
   rowHeaderGroup.add(auditLogIndicatorColor);
