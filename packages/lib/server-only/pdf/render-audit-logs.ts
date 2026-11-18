@@ -58,12 +58,21 @@ const textSm = 9;
 const textXs = 8;
 const fontMedium = '500';
 
-const pageTopMargin = 60;
+const pageTitleTop = 48;
+const pageTitleHeight = 40;
+const pageTopMargin = pageTitleTop + pageTitleHeight;
 const pageBottomMargin = 72;
 const pageFooterMargin = 48;
 const contentMaxWidth = 768;
 const rowPadding = 10;
 const titleFontSize = 18;
+
+// The title box starts below the top margin, so a page group's bottom edge is its top plus its height.
+const getBottom = (group: Konva.Group) => {
+  const rect = group.getClientRect();
+
+  return rect.y + rect.height;
+};
 
 type RenderOverviewCardLabelAndTextOptions = {
   label: string;
@@ -509,13 +518,12 @@ const groupRowsIntoPages = (options: GroupRowsIntoPagesOptions) => {
 type RenderPagesOptions = {
   groupedRows: Konva.Group[][];
   margin: number;
-  pageTopMargin: number;
   i18n: I18n;
   overviewCard: Konva.Group;
 };
 
 const renderPages = (options: RenderPagesOptions) => {
-  const { groupedRows, margin, pageTopMargin, i18n, overviewCard } = options;
+  const { groupedRows, margin, i18n, overviewCard } = options;
 
   const rowPadding = 10;
   const pages: Konva.Group[] = [];
@@ -527,8 +535,8 @@ const renderPages = (options: RenderPagesOptions) => {
     // Add title to each page
     const pageTitle = new Konva.Text({
       x: margin,
-      y: 0,
-      height: pageTopMargin,
+      y: pageTitleTop,
+      height: pageTitleHeight,
       verticalAlign: 'middle',
       text: i18n._(msg`Audit Log`),
       fill: textTitle,
@@ -542,14 +550,14 @@ const renderPages = (options: RenderPagesOptions) => {
     if (pageIndex === 0) {
       overviewCard.setAttrs({
         x: margin,
-        y: pageGroup.getClientRect().height,
+        y: getBottom(pageGroup),
       });
       pageGroup.add(overviewCard);
     }
 
     // Add rows to the page
     for (const row of rows) {
-      const yPosition = pageGroup.getClientRect().height + rowPadding;
+      const yPosition = getBottom(pageGroup) + rowPadding;
 
       row.setAttrs({
         x: margin,
@@ -605,7 +613,6 @@ export async function renderAuditLogs({
   const pageGroups = renderPages({
     groupedRows,
     margin,
-    pageTopMargin,
     i18n,
     overviewCard,
   });
@@ -637,12 +644,12 @@ export async function renderAuditLogs({
 
     // Add branding on the last page if there is space.
     if (index === pageGroups.length - 1 && !hidePoweredBy) {
-      const remainingHeight = pageHeight - pageGroup.getClientRect().height - pageBottomMargin;
+      const remainingHeight = pageHeight - getBottom(pageGroup) - pageBottomMargin;
 
       if (brandingRect.height + brandingTopPadding <= remainingHeight) {
         brandingGroup.setAttrs({
           x: pageWidth - brandingRect.width - margin,
-          y: pageGroup.getClientRect().height + brandingTopPadding,
+          y: getBottom(pageGroup) + brandingTopPadding,
         } satisfies Partial<Konva.GroupConfig>);
 
         page.add(brandingGroup);

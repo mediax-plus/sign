@@ -89,12 +89,21 @@ const fontMedium = '500';
 const columnWidthPercentages = [30, 30, 40];
 const rowPadding = 12;
 const tableHeaderHeight = 38;
-const pageTopMargin = 72;
+const pageTitleTop = 48;
+const pageTitleHeight = 40;
+const pageTopMargin = pageTitleTop + pageTitleHeight;
 const pageBottomMargin = 72;
 const pageFooterMargin = 48;
 const contentMaxWidth = 768;
 
 const titleFontSize = 18;
+
+// The title box starts below the top margin, so a page group's bottom edge is its top plus its height.
+const getBottom = (group: Konva.Group) => {
+  const rect = group.getClientRect();
+
+  return rect.y + rect.height;
+};
 
 type RenderLabelAndTextOptions = {
   label: string;
@@ -767,8 +776,8 @@ export async function renderCertificate({
 
     const titleText = new Konva.Text({
       x: margin,
-      y: 0,
-      height: pageTopMargin,
+      y: pageTitleTop,
+      height: pageTitleHeight,
       verticalAlign: 'middle',
       text: i18n._(msg`Signing Certificate`),
       fill: textTitle,
@@ -787,12 +796,12 @@ export async function renderCertificate({
 
     // Add QR code and branding on the last page if there is space.
     if (index === tables.length - 1 && !hidePoweredBy) {
-      const remainingHeight = pageHeight - group.getClientRect().height - pageBottomMargin;
+      const remainingHeight = pageHeight - getBottom(group) - pageBottomMargin;
 
       if (brandingRect.height + brandingTopPadding <= remainingHeight) {
         brandingGroup.setAttrs({
           x: pageWidth - brandingRect.width - margin,
-          y: group.getClientRect().height + brandingTopPadding,
+          y: getBottom(group) + brandingTopPadding,
         } satisfies Partial<Konva.GroupConfig>);
 
         page.add(brandingGroup);
@@ -825,7 +834,7 @@ export async function renderCertificate({
 
     brandingGroup.setAttrs({
       x: pageWidth - brandingRect.width - margin,
-      y: pageTopMargin / 2, // Less padding since there's nothing else on this page.
+      y: pageTitleTop, // Less padding since there's nothing else on this page.
     } satisfies Partial<Konva.GroupConfig>);
 
     const overflowFooterText = new Konva.Text({
