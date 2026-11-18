@@ -28,7 +28,7 @@ export const DocumentCancelTemplate = ({
   // The sender can be a team, so "Media eXperience" is kept on one line.
   const inviterName = keepBrandTogether(inviterNameProp);
 
-  const previewText = msg`${inviterName} has cancelled the document ${documentName}, you don't need to sign it anymore.`;
+  const previewText = msg`${inviterName} has cancelled the document “${documentName}”, you don’t need to sign it anymore.`;
 
   return (
     <TemplateMxLetter
@@ -37,10 +37,10 @@ export const DocumentCancelTemplate = ({
       heading={
         <Trans>
           {inviterName} has cancelled the document
-          <br />"{documentName}"
+          <br />“{documentName}”
         </Trans>
       }
-      lines={[<Trans>All signatures have been voided.</Trans>, <Trans>You don't need to sign it anymore.</Trans>]}
+      lines={[<Trans>All signatures have been voided.</Trans>, <Trans>You don’t need to sign it anymore.</Trans>]}
       chip={{ title: documentName }}
       message={cancellationReason ? <Trans>Reason for cancellation: {cancellationReason}</Trans> : null}
     />

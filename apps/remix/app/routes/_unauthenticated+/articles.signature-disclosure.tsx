@@ -37,7 +37,7 @@ export default function SignatureDisclosure() {
         <p>
           <Trans>
             When you use our platform to affix your electronic signature to documents, you are consenting to do so under
-            the Electronic Signatures in Global and National Commerce Act (E-Sign Act) and other applicable laws. This
+            the laws that apply to electronic signatures. This
             action indicates your agreement to use electronic means to sign documents and receive notifications.
           </Trans>
         </p>

@@ -72,7 +72,8 @@ export const DocumentReminderEmailTemplate = ({
           <br />“{documentName}”
         </Trans>
       }
-      lines={[<Trans>Hi {recipientName},</Trans>, line]}
+      // When the sender wrote a message, it greets the recipient itself, so the reminder does not add its own greeting.
+      lines={customBody?.trim() ? [line] : [<Trans>Hi {recipientName},</Trans>, line]}
       chip={{ title: documentName, href: signDocumentLink }}
       message={customBody?.trim() ? <TemplateCustomMessageBody text={customBody} /> : null}
       button={buttonLabel ? { label: buttonLabel, href: signDocumentLink } : undefined}

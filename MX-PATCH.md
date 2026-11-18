@@ -34,7 +34,8 @@ the v2.22.0 tag.
    names wrapped between words and emails after "@", MX colours, 24-hour times, and the
    reason "I am the sender of this document" for the document owner.
 9. The page after signing has no Share button.
-10. Other partner-facing text: the signature disclosure, the cancelled-document page, the passkey and
+10. Other partner-facing text: the signature disclosure (which names no particular law: signing happens "under the
+    laws that apply to electronic signatures"), the cancelled-document page, the passkey and
     authenticator names and the web manifest name Media eXperience.
 11. A "Source code" link to https://github.com/mediax-plus/sign on the recipient pages and the
     signed-out pages, as section 13 of the AGPL requires.
@@ -50,7 +51,8 @@ the v2.22.0 tag.
     links wrap instead of widening the email, and "Media eXperience" never breaks across lines. The
     words of the emails are unchanged, except that the email after signing one's own document no
     longer offers a free account or links to Documenso's pricing page, and the email to people copied
-    on a completed document no longer says "Do not sign it". Document titles made of file names
+    on a completed document no longer says "Do not sign it". The reminder leaves out its own greeting when the
+    sender wrote a message, and the rejection and cancellation emails use curly quotes. Document titles made of file names
     break after "_", "-" and "/" and before "." (zero-width spaces, display only). New pictures in apps/remix/public/static: email-logo.png
     (the wordmark on a white rounded plate, 2x) and doc-chip.png (the page picture, 2x). The
     signing certificate and audit log pages print body text in slate instead of Documenso grey and

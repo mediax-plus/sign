@@ -24,7 +24,7 @@ export function DocumentRejectedEmail({
 
   const { _ } = useLingui();
 
-  const previewText = _(msg`${recipientName} has rejected the document '${documentName}'`);
+  const previewText = _(msg`${recipientName} has rejected the document “${documentName}”`);
 
   const signerName = recipientName;
 
@@ -35,7 +35,7 @@ export function DocumentRejectedEmail({
       heading={<Trans>Document Rejected</Trans>}
       lines={[
         <Trans>
-          {signerName} has rejected the document "{documentName}".
+          {signerName} has rejected the document “{documentName}”.
         </Trans>,
         <Trans>You can view the document and its status by clicking the button below.</Trans>,
       ]}

@@ -23,7 +23,7 @@ export function DocumentRejectionConfirmedEmail({
 
   const { _ } = useLingui();
 
-  const previewText = _(msg`You have rejected the document '${documentName}'`);
+  const previewText = _(msg`You have rejected the document “${documentName}”`);
 
   return (
     <TemplateMxLetter
@@ -33,7 +33,7 @@ export function DocumentRejectionConfirmedEmail({
       lines={[
         <Trans>
           This email confirms that you have rejected the document{' '}
-          <strong style={mxStrong}>"{documentName}"</strong> sent by {documentOwnerName}.
+          <strong style={mxStrong}>“{documentName}”</strong> sent by {documentOwnerName}.
         </Trans>,
         <Trans>
           The document owner has been notified of this rejection. No further action is required from you at this time.
