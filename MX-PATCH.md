@@ -31,7 +31,7 @@ the v2.22.0 tag.
 7. File names: completed-email attachments no longer end in ".pdf.pdf", and new documents take the
    file name without a trailing ".pdf" as their title.
 8. Signing certificate and audit log pages in the sealed PDF: 48 px top, side and bottom margins,
-   names wrapped between words and emails after "@" or ".", MX colours, 24-hour times, and the
+   names wrapped between words and emails after "@", MX colours, 24-hour times, and the
    reason "I am the sender of this document" for the document owner.
 9. The page after signing has no Share button.
 10. Other partner-facing text: the signature disclosure, the cancelled-document page, the passkey and
@@ -40,3 +40,18 @@ the v2.22.0 tag.
     signed-out pages, as section 13 of the AGPL requires.
 12. CI: the upstream workflows are removed. .github/workflows/mx-image.yml builds docker/Dockerfile
     and publishes the image to ghcr.io/mediax-plus/sign.
+13. Email layout: every email is built from one letter layout
+    (packages/email/template-components/template-mx-letter.tsx). A white card with a light grey
+    frame, at most 600 px wide with a 16 px margin at every width, carries the MX logo, a status
+    line where the email had one, the heading and text, the document title in a framed chip with a
+    page picture (a link to the same address as the button), the sender's message in a grey panel
+    and one navy button; the footer lines sit under the card. Phones get a full-width button and
+    smaller margins, and Outlook for Windows gets a fixed 600 px column. Long titles, names and
+    links wrap instead of widening the email, and "Media eXperience" never breaks across lines. The
+    words of the emails are unchanged. New pictures in apps/remix/public/static: email-logo.png
+    (the wordmark on a white rounded plate, 2x) and doc-chip.png (the page picture, 2x). The
+    signing certificate and audit log pages print body text in slate instead of Documenso grey and
+    break email addresses only after "@". The signature disclosure page always shows in the light
+    theme, with the MX logo at the top. .github/workflows/mx-email-previews.yml renders every email
+    with sample data on each push to an mx/ branch, or when started by hand, uploads the result as
+    the email-previews artifact and runs the type checks of the email package and the app.
