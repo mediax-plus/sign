@@ -55,4 +55,5 @@ the v2.22.0 tag.
     break email addresses only after "@". The signature disclosure page always shows in the light
     theme, with the MX logo at the top. .github/workflows/mx-email-previews.yml renders every email
     with sample data on each push to an mx/ branch, or when started by hand, uploads the result as
-    the email-previews artifact and runs the type checks of the email package and the app.
+    the email-previews artifact and runs the app's type check, which also compiles the email
+    templates.

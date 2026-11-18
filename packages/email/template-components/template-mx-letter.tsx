@@ -156,8 +156,8 @@ const MxButton = ({ link, secondary = false }: { link: TemplateMxLetterLink; sec
               style={mxMsoStyle({
                 display: 'inline-block',
                 padding: '12px 28px',
-                msoPaddingAlt: '0',
                 ...mxText(16, 24, 600, color),
+                msoPaddingAlt: '0',
                 textDecoration: 'none',
                 borderRadius: '6px',
               })}

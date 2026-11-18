@@ -64,10 +64,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Type check the email package
-        if: ${{ !cancelled() && steps.prisma.outcome == 'success' }}
-        run: npx tsc --noEmit -p packages/email/tsconfig.json
-
       # The same check the image build runs before it builds the app. It covers every file the app
       # imports, so the certificate code in packages/lib and the email templates are included.
       - name: Type check the app
